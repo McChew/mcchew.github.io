@@ -27,8 +27,8 @@
     </form>
 
     <div class="ui-body ui-body-a ui-corner-all">
-      <h1 id="d20"></h1>
-      <h2 id="action"></h2>
+      <h1 id="d20_beastman"></h1>
+      <h2 id="behavior_beastman"></h2>
     </div>
 	</div><!-- /content -->
 
@@ -45,7 +45,7 @@
     function pickcolumn(c){
       var column = c;
       var d = Math.floor(Math.random() * 20) + 1;
-      document.getElementById("d20").innerHTML = d;
+      document.getElementById("d20_bestman").innerHTML = d;
       
       if (d == 20) {
         var row = 6;
@@ -63,7 +63,7 @@
           var row = 0;
         }
 
-      document.getElementById("action").innerHTML = actions[column][row];
+      document.getElementById("behavior_beastman").innerHTML = actions[column][row];
     }
 </script>
 
