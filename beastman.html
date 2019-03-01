@@ -36,11 +36,11 @@
 
 <script>
   
-    var actions = new Array();
-    actions[0] = new Array("Sneak", "Advance", "Advance", "Charge", "Charge", "Rush", "Rush");
-    actions[1] = new Array("Onslaught", "Onslaught", "Onslaught", "Onslaught", "Onslaught", "Rapid Fire", "Rapid Fireh");
-    actions[2] = new Array("Aim", "Onslaught", "Onslaught", "Onslaught", "Advance", "Rapid Fire", "Rapid Fire");
-    actions[3] = new Array("Aim", "Aim", "Onslaught", "Onslaught", "Advance", "Rapid Fire", "Rapid Fire");
+    var actions_beastman = new Array();
+    actions_beastman[0] = new Array("Sneak", "Advance", "Advance", "Charge", "Charge", "Rush", "Rush");
+    actions_beastman[1] = new Array("Onslaught", "Onslaught", "Onslaught", "Onslaught", "Onslaught", "Rapid Fire", "Rapid Fireh");
+    actions_beastman[2] = new Array("Aim", "Onslaught", "Onslaught", "Onslaught", "Advance", "Rapid Fire", "Rapid Fire");
+    actions_beastman[3] = new Array("Aim", "Aim", "Onslaught", "Onslaught", "Advance", "Rapid Fire", "Rapid Fire");
   
     function pickcolumn(c){
       var column = c;
@@ -63,7 +63,7 @@
           var row = 0;
         }
 
-      document.getElementById("behavior_beastman").innerHTML = actions[column][row];
+      document.getElementById("behavior_beastman").innerHTML = actions_beastman[column][row];
     }
 </script>
 

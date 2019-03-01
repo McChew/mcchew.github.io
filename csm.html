@@ -37,12 +37,12 @@
 
 <script>
   
-    var actions = new Array();
-    actions[0] = new Array("Sneak", "Advance", "Advance", "Charge", "Charge", "Rush", "Rush");
-    actions[1] = new Array("Onslaught", "Onslaught", "Onslaught", "Onslaught", "Onslaught", "Rapid Fire", "Rapid Fireh");
-    actions[2] = new Array("Aim", "Onslaught", "Onslaught", "Onslaught", "Advance", "Rapid Fire", "Rapid Fire");
-    actions[3] = new Array("Aim", "Aim", "Onslaught", "Onslaught", "Advance", "Rapid Fire", "Rapid Fire");
-    actions[4] = new Array("Aim", "Aim", "Advance", "Aim", "Advance", "Rapid Fire", "Rapid Fire");
+    var actions_csm = new Array();
+    actions_csm[0] = new Array("Sneak", "Advance", "Advance", "Charge", "Charge", "Rush", "Rush");
+    actions_csm[1] = new Array("Onslaught", "Onslaught", "Onslaught", "Onslaught", "Onslaught", "Rapid Fire", "Rapid Fireh");
+    actions_csm[2] = new Array("Aim", "Onslaught", "Onslaught", "Onslaught", "Advance", "Rapid Fire", "Rapid Fire");
+    actions_csm[3] = new Array("Aim", "Aim", "Onslaught", "Onslaught", "Advance", "Rapid Fire", "Rapid Fire");
+    actions_csm[4] = new Array("Aim", "Aim", "Advance", "Aim", "Advance", "Rapid Fire", "Rapid Fire");
   
     function pickcolumn(c){
       var column = c;
@@ -65,7 +65,7 @@
           var row = 0;
         }
 
-      document.getElementById("behavior_csm").innerHTML = actions[column][row];
+      document.getElementById("behavior_csm").innerHTML = actions_csm[column][row];
     }
 </script>
 
