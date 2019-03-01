@@ -5,7 +5,7 @@
 <link href="https://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.css" rel="stylesheet" type="text/css" />
 <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
 <script src="https://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.js"></script>
-<a class="ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all"></a>
+<a class="ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all" data-rel="back"></a>
 <h1>Chaos Beastman</h1>
 </div><!-- /header -->
 
@@ -13,7 +13,6 @@
  <form>
    <input type="button" onclick="pickcolumn(0)" value="Hidden">
    <input type="button" onclick="pickcolumn(1)" value="Engaged">
-   <input type="button" onclick="pickcolumn(2)" value="In Cover">
    <input type="button" onclick="pickcolumn(3)" value="Close">
    <input type="button" onclick="pickcolumn(4)" value="Other">
 </form>
@@ -24,10 +23,10 @@
 <script>
   
 var actions = new Array();
-actions[0] = new Array("Sneak", "Advance", "Advance", "Charge", "Charge", "Rush", "Rush");
-actions[1] = new Array("Onslaught", "Onslaught", "Onslaught", "Onslaught", "Onslaught", "Rapid Fire", "Rapid Fireh");
-actions[2] = new Array("Aim", "Onslaught", "Onslaught", "Onslaught", "Advance", "Rapid Fire", "Rapid Fire");
-actions[3] = new Array("Aim", "Aim", "Onslaught", "Onslaught", "Advance", "Rapid Fire", "Rapid Fire");
+actions[0] = new Array("Hold", "Advance", "Advance", "Charge", "Charge", "Rush", "Rush");
+actions[1] = new Array("Onslaught", "Onslaught", "Onslaught", "Onslaught", "Onslaught", "Fury", "Fury");
+actions[2] = new Array("Onslaught", "Onslaught", "Onslaught", "Charge", "Charge", "Charge", "Rush");
+actions[3] = new Array("Advance", "Advance", "Advance", "Charge", "Charge", "Charge", "Rush");
   
 function pickcolumn(c){
   var column = c;
@@ -52,13 +51,6 @@ function pickcolumn(c){
 
   document.getElementById("action").innerHTML = actions[column][row];
 }
-
-function clear(){
-  document.getElementById("d20").innerHTML = "";
-  document.getElementById("action").innerHTML = "";
-}
-  
-$('#hostiles').click(function(){ clear();  });
     
 </script>
 	</div><!-- /content -->
