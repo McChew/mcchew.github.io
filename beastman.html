@@ -5,7 +5,7 @@
 <link href="https://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.css" rel="stylesheet" type="text/css" />
 <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
 <script src="https://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.js"></script>
-<a class="ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all" data-rel="back"></a>
+<a class="ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all"></a>
 <h1>Chaos Beastman</h1>
 </div><!-- /header -->
 
@@ -18,16 +18,16 @@
    <input type="button" onclick="pickcolumn(4)" value="Other">
 </form>
 
-<p id="d20_cb"></p>
-<p id="action_cb"></p>
+<p id="d20"></p>
+<p id="action"></p>
 
 <script>
   
-var actions_cb = new Array();
-actions_cb[0] = new Array("Sneak", "Advance", "Advance", "Charge", "Charge", "Rush", "Rush");
-actions_cb[1] = new Array("Onslaught", "Onslaught", "Onslaught", "Onslaught", "Onslaught", "Rapid Fire", "Rapid Fireh");
-actions_cb[2] = new Array("Aim", "Onslaught", "Onslaught", "Onslaught", "Advance", "Rapid Fire", "Rapid Fire");
-actions_cb[3] = new Array("Aim", "Aim", "Onslaught", "Onslaught", "Advance", "Rapid Fire", "Rapid Fire");
+var actions = new Array();
+actions[0] = new Array("Sneak", "Advance", "Advance", "Charge", "Charge", "Rush", "Rush");
+actions[1] = new Array("Onslaught", "Onslaught", "Onslaught", "Onslaught", "Onslaught", "Rapid Fire", "Rapid Fireh");
+actions[2] = new Array("Aim", "Onslaught", "Onslaught", "Onslaught", "Advance", "Rapid Fire", "Rapid Fire");
+actions[3] = new Array("Aim", "Aim", "Onslaught", "Onslaught", "Advance", "Rapid Fire", "Rapid Fire");
   
 function pickcolumn(c){
   var column = c;
@@ -50,12 +50,12 @@ function pickcolumn(c){
     var row = 0;
   }
 
-  document.getElementById("action_cb").innerHTML = actions_csm[column][row];
+  document.getElementById("action_cb").innerHTML = actions[column][row];
 }
 
 function clear(){
-  document.getElementById("d20_cb").innerHTML = "";
-  document.getElementById("action_cb").innerHTML = "";
+  document.getElementById("d20").innerHTML = "";
+  document.getElementById("action").innerHTML = "";
 }
   
 $('#hostiles').click(function(){ clear();  });
