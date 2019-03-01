@@ -1,71 +1,73 @@
-<html>
-<head>
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
-<div data-role="header">
-<link href="https://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.css" rel="stylesheet" type="text/css" />
-<script src="https://code.jquery.com/jquery-1.11.3.js"></script>
-<script src="https://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.js"></script>
-<a class="ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all" data-rel="back"></a>
-<h1>Chaos Beastman</h1>
-</div>
-</head>
-
-<style>
-    div.a {
-      font-size: 1px;
-    }
-</style>
-
-<body>
-<div role="main" class="ui-content">
- <form>
-   <input type="button" onclick="pickcolumn(0)" value="Hidden">
-   <input type="button" onclick="pickcolumn(1)" value="Engaged">
-   <input type="button" onclick="pickcolumn(2)" value="Close">
-   <input type="button" onclick="pickcolumn(3)" value="Other">
-</form>
-
-<div class="ui-body ui-body-a ui-corner-all">
-    <h1 align="center" id="d20"></h1>
-    <h2 align="center" id="action"></h2>
-</div>
-
-
-<script>
+<!DOCTYPE html> 
+<html> 
   
-var actions = new Array();
-actions[0] = new Array("Hold", "Advance", "Advance", "Charge", "Charge", "Rush", "Rush");
-actions[1] = new Array("Onslaught", "Onslaught", "Onslaught", "Onslaught", "Onslaught", "Fury", "Fury");
-actions[2] = new Array("Onslaught", "Onslaught", "Onslaught", "Charge", "Charge", "Charge", "Rush");
-actions[3] = new Array("Advance", "Advance", "Advance", "Charge", "Charge", "Charge", "Rush");
+<head> 
+	<title>Blackstone</title> 
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<link href="https://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.css" rel="stylesheet" type="text/css" />
+  <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+  <script src="https://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.js"></script>
+</head> 
   
-function pickcolumn(c){
-  var column = c;
-  var d = Math.floor(Math.random() * 20) + 1;
-  document.getElementById("d20").innerHTML = d;
-      
-  if (d == 20) {
-    var row = 6;
-  } else if (d <= 19 && d >= 18) {
-    var row = 5;
-  } else if (d <= 15 && d >= 13) {
-    var row = 4; 
-  } else if (d <= 12 && d >= 10) {
-    var row = 3;
-  } else if (d <= 9 && d >= 7) {
-    var row = 2;
-  } else if (d <= 6 && d >= 4) {
-    var row = 1;
-  } else {
-    var row = 0;
-  }
+<body> 
 
-  document.getElementById("action").innerHTML = actions[column][row];
-}
-    
-</script>
+<div data-role="page">
+
+	<div data-role="header">
+    <a class="ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all" data-rel="back"></a>
+    <h1>Chaos Beastman</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">	
+    <form>
+      <input type="button" onclick="pickcolumn(0)" value="Hidden">
+      <input type="button" onclick="pickcolumn(1)" value="Engaged">
+      <input type="button" onclick="pickcolumn(2)" value="Close">
+      <input type="button" onclick="pickcolumn(3)" value="Other">
+    </form>
+
+    <div class="ui-body ui-body-a ui-corner-all">
+      <h1 id="d20"></h1>
+      <h2 id="action"></h2>
+    </div>
 	</div><!-- /content -->
 
 </div><!-- /page -->
+
+<script>
+  
+    var actions = new Array();
+    actions[0] = new Array("Hold", "Advance", "Advance", "Charge", "Charge", "Rush", "Rush");
+    actions[1] = new Array("Onslaught", "Onslaught", "Onslaught", "Onslaught", "Onslaught", "Fury", "Fury");
+    actions[2] = new Array("Onslaught", "Onslaught", "Onslaught", "Charge", "Charge", "Charge", "Rush");
+    actions[3] = new Array("Advance", "Advance", "Advance", "Charge", "Charge", "Charge", "Rush");
+      
+    function pickcolumn(c){
+      var column = c;
+      var d = Math.floor(Math.random() * 20) + 1;
+      document.getElementById("d20").innerHTML = d;
+          
+      if (d == 20) {
+        var row = 6;
+      } else if (d <= 19 && d >= 18) {
+        var row = 5;
+      } else if (d <= 15 && d >= 13) {
+        var row = 4; 
+      } else if (d <= 12 && d >= 10) {
+        var row = 3;
+      } else if (d <= 9 && d >= 7) {
+        var row = 2;
+      } else if (d <= 6 && d >= 4) {
+        var row = 1;
+      } else {
+        var row = 0;
+      }
+    
+      document.getElementById("action").innerHTML = actions[column][row];
+    }
+        
+    </script>
+
 </body>
+  
 </html>
