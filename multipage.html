@@ -1,0 +1,148 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+	<title>Blackstone</title> 
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+
+    <link rel = "stylesheet" href = "https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+    
+    <script src = "https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    
+    <script src = "https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+</head> 
+<body> 
+
+    <script>
+
+        var column;
+        var d;
+        var row;
+
+        var actions_beastman = new Array();
+        actions_beastman[0] = new Array("Sneak", "Advance", "Advance", "Charge", "Charge", "Rush", "Rush");
+        actions_beastman[1] = new Array("Onslaught", "Onslaught", "Onslaught", "Onslaught", "Onslaught", "Rapid Fire", "Rapid Fireh");
+        actions_beastman[2] = new Array("Aim", "Onslaught", "Onslaught", "Onslaught", "Advance", "Rapid Fire", "Rapid Fire");
+        actions_beastman[3] = new Array("Aim", "Aim", "Onslaught", "Onslaught", "Advance", "Rapid Fire", "Rapid Fire");
+        
+        var actions_csm = new Array();
+        actions_csm[0] = new Array("Sneak", "Advance", "Advance", "Charge", "Charge", "Rush", "Rush");
+        actions_csm[1] = new Array("Onslaught", "Onslaught", "Onslaught", "Onslaught", "Onslaught", "Rapid Fire", "Rapid Fireh");
+        actions_csm[2] = new Array("Aim", "Onslaught", "Onslaught", "Onslaught", "Advance", "Rapid Fire", "Rapid Fire");
+        actions_csm[3] = new Array("Aim", "Aim", "Onslaught", "Onslaught", "Advance", "Rapid Fire", "Rapid Fire");
+        actions_csm[4] = new Array("Aim", "Aim", "Advance", "Aim", "Advance", "Rapid Fire", "Rapid Fire");
+
+        function pickcolumn(c){
+            column = c;
+            d = Math.floor(Math.random() * 20) + 1;
+      
+            if (d == 20) {
+                row = 6;
+                } else if (d <= 19 && d >= 18) {
+                row = 5;
+                } else if (d <= 15 && d >= 13) {
+                row = 4; 
+                } else if (d <= 12 && d >= 10) {
+                row = 3;
+                } else if (d <= 9 && d >= 7) {
+                row = 2;
+                } else if (d <= 6 && d >= 4) {
+                row = 1;
+                } else {
+                row = 0;
+            }
+        }
+        	  
+        function print_beastman(){
+            document.getElementById("d20_beastman").innerHTML = d;
+            document.getElementById("behavior_beastman").innerHTML = actions_beastman[column][row];
+        }
+
+        function print_csm(){
+            document.getElementById("d20_csm").innerHTML = d;
+            document.getElementById("behavior_csm").innerHTML = actions_csm[column][row];
+        }
+
+    </script>
+
+    <!-- Start of first page -->
+    <div data-role="page" id="hostiles">
+    
+        <div data-role="header">
+            <h1>Hostiles</h1>
+        </div><!-- /header -->
+    
+        <div data-role="content">		
+            <a href="#beastman" data-role="button" data-transition="slide">Chaos Beastman</a>
+            <a href="#csm" data-role="button" data-transition="slide">Chaos Space Marine</a>
+            <a href="#negavolt" data-role="button" data-transition="slide">Negavolt Cultist</a>
+            <a href="#obsidius" data-role="button" data-transition="slide">Obsidius Mallex</a>
+            <a href="#psyker" data-role="button" data-transition="slide">Rogue Psyker</a>
+            <a href="#spindle" data-role="button" data-transition="slide">Spindle Drone</a>
+            <a href="#guard" data-role="button" data-transition="slide">Traitor Guardsman</a>
+            <a href="#urghul" data-role="button" data-transition="slide">Ur-ghul</a> 		
+        </div><!-- /content -->
+    
+        <div data-role="footer">
+            <h4>Page Footer</h4>
+        </div><!-- /footer -->
+    </div>
+    <!-- /page -->
+    
+    
+    <!-- Start of second page -->
+    <div data-role="page" id="beastman">
+    
+        <div data-role="header">
+            <a data-rel="back" class="ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all" onclick="clear()" id="back">No text</a>
+            <h1>Chaos Beastman</h1>
+        </div><!-- /header -->
+        
+        <div data-role="content">	
+            <form>
+                <input type="button" onclick="pickcolumn(0); print_beastman();" value="Hidden">
+                <input type="button" onclick="pickcolumn(1); print_beastman();" value="Engaged">
+                <input type="button" onclick="pickcolumn(2); print_beastman();" value="Close">
+                <input type="button" onclick="pickcolumn(3); print_beastman();" value="Other">
+              </form>
+          
+              <div class="ui-body ui-body-a ui-corner-all">
+                <h1 class="output" id="d20_beastman"></h1>
+                <h2 class="output" id="behavior_beastman"></h2>
+              </div>        
+            </div><!-- /content -->
+    
+        <div data-role="footer">
+            <h4>Page Footer</h4>
+        </div><!-- /footer -->
+    </div><!-- /page -->
+
+        <!-- Start of second page -->
+        <div data-role="page" id="csm">
+    
+                <div data-role="header">
+                    <a data-rel="back" class="ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all">No text</a>
+                    <h1>Chaos Space Marine</h1>
+                </div><!-- /header -->
+                
+                <div data-role="content">	
+                    <form>
+                        <input type="button" onclick="pickcolumn(0); print_csm();" value="Hidden">
+                        <input type="button" onclick="pickcolumn(1); print_csm();" value="Engaged">
+                        <input type="button" onclick="pickcolumn(2); print_csm();" value="In Cover">
+                        <input type="button" onclick="pickcolumn(3); print_csm();" value="Close">
+                        <input type="button" onclick="pickcolumn(4); print_csm();" value="Other">
+                    </form>
+                  
+                    <div class="ui-body ui-body-a ui-corner-all output">
+                        <h1 id="d20_csm"></h1>
+                        <h2 id="behavior_csm"></h2>
+                    </div>        
+                </div><!-- /content -->                 
+                
+                <div data-role="footer">
+                    <h4>Page Footer</h4>
+                </div><!-- /footer -->
+            </div><!-- /page -->
+        
+    </body></html>
