@@ -10,6 +10,23 @@
     <script src = "https://code.jquery.com/jquery-1.11.3.min.js"></script>
     
     <script src = "https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+    <script id="panel-init">
+		$(function() {
+			$( "body>[data-role='panel']" ).panel();
+		});
+    </script>
+
+    <script>$.mobile.page.prototype.options.theme = "b";</script>
+    
+    <style>
+        .ui-header .ui-title {
+            overflow: visible !important;
+            white-space: normal !important;
+            margin-right: 10%;
+            margin-left: 10%;
+        }
+    </style>
 </head> 
 <body> 
 
@@ -18,52 +35,107 @@
         var column;
         var d;
         var row;
-
-        var actions_beastman = new Array();
-        actions_beastman[0] = new Array("Sneak", "Advance", "Advance", "Charge", "Charge", "Rush", "Rush");
-        actions_beastman[1] = new Array("Onslaught", "Onslaught", "Onslaught", "Onslaught", "Onslaught", "Rapid Fire", "Rapid Fireh");
-        actions_beastman[2] = new Array("Aim", "Onslaught", "Onslaught", "Onslaught", "Advance", "Rapid Fire", "Rapid Fire");
-        actions_beastman[3] = new Array("Aim", "Aim", "Onslaught", "Onslaught", "Advance", "Rapid Fire", "Rapid Fire");
-        
-        var actions_csm = new Array();
-        actions_csm[0] = new Array("Sneak", "Advance", "Advance", "Charge", "Charge", "Rush", "Rush");
-        actions_csm[1] = new Array("Onslaught", "Onslaught", "Onslaught", "Onslaught", "Onslaught", "Rapid Fire", "Rapid Fireh");
-        actions_csm[2] = new Array("Aim", "Onslaught", "Onslaught", "Onslaught", "Advance", "Rapid Fire", "Rapid Fire");
-        actions_csm[3] = new Array("Aim", "Aim", "Onslaught", "Onslaught", "Advance", "Rapid Fire", "Rapid Fire");
-        actions_csm[4] = new Array("Aim", "Aim", "Advance", "Aim", "Advance", "Rapid Fire", "Rapid Fire");
+        var action;
+        var description;
 
         function pickcolumn(c){
             column = c;
-            d = Math.floor(Math.random() * 20) + 1;
+            d20 = Math.floor(Math.random() * 20) + 1;
       
-            if (d == 20) {
+            if (d20 == 20) {
                 row = 6;
-                } else if (d <= 19 && d >= 18) {
+                } else if (d20 <= 19 && d20 >= 18) {
                 row = 5;
-                } else if (d <= 15 && d >= 13) {
+                } else if (d20 <= 15 && d20 >= 13) {
                 row = 4; 
-                } else if (d <= 12 && d >= 10) {
+                } else if (d20 <= 12 && d20 >= 10) {
                 row = 3;
-                } else if (d <= 9 && d >= 7) {
+                } else if (d20 <= 9 && d20 >= 7) {
                 row = 2;
-                } else if (d <= 6 && d >= 4) {
+                } else if (d20 <= 6 && d20 >= 4) {
                 row = 1;
                 } else {
                 row = 0;
             }
         }
-        	  
-        function print_beastman(){
-            document.getElementById("d20_beastman").innerHTML = d;
-            document.getElementById("behavior_beastman").innerHTML = actions_beastman[column][row];
-        }
 
-        function print_csm(){
-            document.getElementById("d20_csm").innerHTML = d;
-            document.getElementById("behavior_csm").innerHTML = actions_csm[column][row];
+        function findDescription(a){     
+            if (a == "Advance") {
+                description = "Move towards the closest explorer. Then attack the closest explorer that is in range of and visible to this hostile.";
+                } else if (a == "Aim") {
+                description = "Attack the furthest explorer that is in range and visble to this hostile. That attack ignores cover.";
+                description2= "";
+                } else if (a == "Charge") {
+                description = "Move towards the closest explorer. Then attack an explorer that is adjacent and visible to this hostile. If there are no explorers.";
+                description2= "";
+                } else if (a == "Fall Back") {
+                description = "Double this hostile's Move value when they take this action. If this hostile can make a move that ends in a hex that is not visible to any explorers, they do so. If they cannot, they attack the closest explorer that is in range of and visible to this hostile.";
+                description2= "";
+                } else if (a == "Hold") {
+                description = "Do nothing.";
+                description2= "";
+                } else if (a == "Onslaught") {
+                description = "Attack the closest explorer that is in range of and visible to this hostile. Then attack the closest explorer that is in range of and visible to this hostile (this may be a different target if the first explorer is taken out of action or another explorer is equally close).";
+                description2= "";
+                } else if (a == "Sneak") {
+                description = "Make a move that ends as close as possible to an explorer without entering a hex that is visible to any explorers.";
+                description2= "";
+                } else if (a == "Fury") {
+                description = "Take an Onslaught action. Re-roll failed attack rolls for that action.";
+                description2= "Onslaught: Attack the closest explorer that is in range of and visible to this hostile. Then attack the closest explorer that is in range of and visible to this hostile (this may be a different target if the first explorer is taken out of action or another explorer is equally close).";
+                } else if (a == "Rapid Fire") {
+                description = "Take an Onslaught action. Re-roll failed attack rolls for that action.";
+                description2= "Onslaught: Attack the closest explorer that is in range of and visible to this hostile. Then attack the closest explorer that is in range of and visible to this hostile (this may be a different target if the first explorer is taken out of action or another explorer is equally close).";
+                } else if (a == "Rush") {
+                description = "Move towards the closest explorer. Then take a Charge action.";
+                description2= "Charge: Move towards the closest explorer. Then attack an explorer that is adjacent and visible to this hostile. If there are no explorers.";
+                } else if (a == "Recharge") {
+                description = "Remove a wound counter from the Negavolt Cultist. If the Negavolt Cultist does not have a wound counter, treat this result as an Advance result instead.";
+                description2= "Advance: Move towards the closest explorer. Then attack the closest explorer that is in range of and visible to this hostile.";
+                } else if (a == "Overcharge") {
+                description = "Make an overcharged Plasma Pistol attack against the closest explorer this is in range an visible to Obsidius Mallex.";
+                description2= "";
+                } else if (a == "Annihilate") {
+                description = "Place the empowered marker beside the Rouge Psyker. Then attack an explorer that is adjacent and visible to this hostile. Re-roll failed attack rolls for that attack. The Rogue Psyker remains empowered until they suffer a wound or grevious wound.";
+                description2= "";
+                } else if (a == "Disrupt") {
+                description = "One unspent activation or destiny dice shoesn by the hostile player is discarded and cannout be spent this turn. If no unspent activation or destiny dice are available, one explorer chosen by the hostile player suffers a wound.";
+                description2= "";
+                } else if (a == "Empower") {
+                description = "Place the empowered marker beside the Rogue Psyker. If the Rogue Psyker is already empowered, treat this result as a Disrupt result instead. The Rogue Psyker remains empowered until they suffer a wound or grevious wound.";
+                description2= "Disrupt: One unspent activation or destiny dice shoesn by the hostile player is discarded and cannout be spent this turn. If no unspent activation or destiny dice are available, one explorer chosen by the hostile player suffers a wound.";
+                } else if (a == "Regenerate") {
+                description = "Remove a wound counter from the Rogue Psyker. If the Rogue Psyker does not have a wound counter, treat this result as a Disrupt result instead.";
+                description2= "Disrupt: One unspent activation or destiny dice shoesn by the hostile player is discarded and cannout be spent this turn. If no unspent activation or destiny dice are available, one explorer chosen by the hostile player suffers a wound.";
+                } else if (a == "Alert") {
+                description = "Increase the threat level by 1 (see the Threat Level special rule on the Spindle Drone reference card) and then take an Onslaught action. If the threat level is 3, take an Onslaught action and re-roll failed attack rolls for that action instead.";
+                description2= "Onslaught: Attack the closest explorer that is in range of and visible to this hostile. Then attack the closest explorer that is in range of and visible to this hostile (this may be a different target if the first explorer is taken out of action or another explorer is equally close).";
+                } else if (a == "Pounce") {
+                description = "If there is an explorer adjaacent and visible to this Ur-Ghul, take an Onslaught action. Otherwise, take a Charge action. Re-roll failed attack rolls for whichever action is taken.";
+                description2= "Onslaught: Attack the closest explorer that is in range of and visible to this hostile. Then attack the closest explorer that is in range of and visible to this hostile (this may be a different target if the first explorer is taken out of action or another explorer is equally close).";
+                description3= "Charge: Move towards the closest explorer. Then attack an explorer that is adjacent and visible to this hostile. If there are no explorers.";
+                } else {
+                description = "See hostile's Unique Actions.";
+                description2="";
+            }
+            return description;
+            return description2;
+            return description3;
         }
 
     </script>
+
+    <!-- rightpanel  -->
+        <div data-role="panel" id="rightpanel" data-position="right" data-display="overlay" data-theme="b">
+            <p><strong>Hidden:</strong> No line of sight to an explorer.</p>
+            <p><strong>Engaged:</strong> Adjacent to a visible explorer.</p>
+            <p><strong>In Cover:</strong> In cover from all visible explorers <em>(Traitor Guardsman must be armed with a Lasgun)</em>.</p>
+            <p><strong>Close:</strong> Range to the slosest visible explorer is 2 or 3 hexes.</p>
+            <p><strong>Other:</strong> Any other situation.</p>
+            <a data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-left ui-btn-inline">Close</a>
+        </div>
+    <!-- /rightpanel -->
+    
 
     <!-- Start of first page -->
     <div data-role="page" id="hostiles">
@@ -73,29 +145,49 @@
         </div><!-- /header -->
     
         <div data-role="content">		
-            <a href="#beastman" data-role="button" data-transition="slide">Chaos Beastman</a>
-            <a href="#csm" data-role="button" data-transition="slide">Chaos Space Marine</a>
-            <a href="#negavolt" data-role="button" data-transition="slide">Negavolt Cultist</a>
-            <a href="#obsidius" data-role="button" data-transition="slide">Obsidius Mallex</a>
-            <a href="#psyker" data-role="button" data-transition="slide">Rogue Psyker</a>
-            <a href="#spindle" data-role="button" data-transition="slide">Spindle Drone</a>
-            <a href="#guard" data-role="button" data-transition="slide">Traitor Guardsman</a>
-            <a href="#urghul" data-role="button" data-transition="slide">Ur-ghul</a> 		
+            <a href="#beastman" data-role="button" data-transition="slidefade">Chaos Beastman</a>
+            <a href="#csm" data-role="button" data-transition="slidefade">Chaos Space Marine</a>
+            <a href="#negavolt" data-role="button" data-transition="slidefade">Negavolt Cultist</a>
+            <a href="#obsidius" data-role="button" data-transition="slidefade">Obsidius Mallex</a>
+            <a href="#psyker" data-role="button" data-transition="slidefade">Rogue Psyker</a>
+            <a href="#spindle" data-role="button" data-transition="slidefade">Spindle Drone</a>
+            <a href="#guard" data-role="button" data-transition="slidefade">Traitor Guardsman</a>
+            <a href="#urghul" data-role="button" data-transition="slidefade">Ur-Ghul</a> 		
         </div><!-- /content -->
-    
-        <div data-role="footer">
-            <h4>Page Footer</h4>
-        </div><!-- /footer -->
+
     </div>
     <!-- /page -->
     
     
     <!-- Start of second page -->
+    <script>
+        function print_beastman(){
+            document.getElementById("d20_beastman").innerHTML = d20;
+            action = actions_beastman[column][row];
+            document.getElementById("action_beastman").innerHTML = action;
+            findDescription(action);
+            document.getElementById("desc_beastman").innerHTML = description;
+            document.getElementById("desc2_beastman").innerHTML = description2;
+        }
+
+        var actions_beastman = new Array();
+        actions_beastman[0] = new Array("Hold", "Advance", "Advance", "Charge", "Charge", "Charge", "Rush");
+        actions_beastman[1] = new Array("Onslaught", "Onslaught", "Onslaught", "Onslaught", "Onslaught", "Fury", "Fury");
+        actions_beastman[2] = new Array("Onslaught", "Onslaught", "Onslaught", "Charge", "Charge", "Charge", "Rush");
+        actions_beastman[3] = new Array("Advance", "Advance", "Advance", "Charge", "Charge", "Charge", "Rush");
+
+    </script>
+    
     <div data-role="page" id="beastman">
     
         <div data-role="header">
-            <a data-rel="back" class="ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all" onclick="clear()" id="back">No text</a>
+            <a data-rel="back" class="ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all backbutton">No text</a>
             <h1>Chaos Beastman</h1>
+            <div data-type="horizontal" data-role="controlgroup" class="ui-btn-right">  
+                    <a href="#rightpanel" class="ui-btn ui-icon-plus ui-btn-icon-notext ui-corner-all">No text</a>
+                    <a href="#rightpanel" class="ui-btn ui-icon-info ui-btn-icon-notext ui-corner-all">No text</a>
+            </div>
+            
         </div><!-- /header -->
         
         <div data-role="content">	
@@ -105,44 +197,152 @@
                 <input type="button" onclick="pickcolumn(2); print_beastman();" value="Close">
                 <input type="button" onclick="pickcolumn(3); print_beastman();" value="Other">
               </form>
-          
-              <div class="ui-body ui-body-a ui-corner-all">
-                <h1 class="output" id="d20_beastman"></h1>
-                <h2 class="output" id="behavior_beastman"></h2>
-              </div>        
-            </div><!-- /content -->
-    
-        <div data-role="footer">
-            <h4>Page Footer</h4>
-        </div><!-- /footer -->
-    </div><!-- /page -->
+              
+            <div class="ui-grid-a" style="text-align: center; margin-bottom: 0px">
+                <div class="ui-block-a">
+                    <h1 class="output" id="d20_beastman"></h1>
+                </div>
+            
+                <div class="ui-block-b">
+                    <h2 class="output" id="action_beastman"></h2>
+                </div>
+            </div><!-- /grid-a -->
 
-        <!-- Start of second page -->
-        <div data-role="page" id="csm">
-    
-                <div data-role="header">
-                    <a data-rel="back" class="ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all">No text</a>
-                    <h1>Chaos Space Marine</h1>
-                </div><!-- /header -->
-                
-                <div data-role="content">	
-                    <form>
-                        <input type="button" onclick="pickcolumn(0); print_csm();" value="Hidden">
-                        <input type="button" onclick="pickcolumn(1); print_csm();" value="Engaged">
-                        <input type="button" onclick="pickcolumn(2); print_csm();" value="In Cover">
-                        <input type="button" onclick="pickcolumn(3); print_csm();" value="Close">
-                        <input type="button" onclick="pickcolumn(4); print_csm();" value="Other">
-                    </form>
-                  
-                    <div class="ui-body ui-body-a ui-corner-all output">
-                        <h1 id="d20_csm"></h1>
-                        <h2 id="behavior_csm"></h2>
-                    </div>        
-                </div><!-- /content -->                 
-                
-                <div data-role="footer">
-                    <h4>Page Footer</h4>
-                </div><!-- /footer -->
-            </div><!-- /page -->
+            <div class="ui-body ui-corner-all">
+                <p class="output" id="desc_beastman"></p>
+                <p class="output" id="desc2_beastman"></p>
+            </div>        
+            </div><!-- /content -->
+
+            <script>        
+                    $( ".backbutton" ).click(function() {
+                        $( ".output" ).empty();
+                    });
+            </script>
+
+    </div>
+    <!-- /page -->
+
+    <!-- Start of third page -->
+        <script>
+            function print_csm(){
+                document.getElementById("d20_csm").innerHTML = d20;
+                action = actions_csm[column][row];
+                document.getElementById("action_csm").innerHTML = action;
+                findDescription(action);
+                document.getElementById("desc_csm").innerHTML = description;
+                document.getElementById("desc2_csm").innerHTML = description2;
+            }
         
-    </body></html>
+            var actions_csm = new Array();
+            actions_csm[0] = new Array("Sneak", "Advance", "Advance", "Charge", "Charge", "Rush", "Rush");
+            actions_csm[1] = new Array("Onslaught", "Onslaught", "Onslaught", "Onslaught", "Onslaught", "Rapid Fire", "Rapid Fire");
+            actions_csm[2] = new Array("Aim", "Onslaught", "Onslaught", "Onslaught", "Advance", "Rapid Fire", "Rapid Fire");
+            actions_csm[3] = new Array("Aim", "Aim", "Onslaught", "Onslaught", "Advance", "Rapid Fire", "Rapid Fire");
+            actions_csm[4] = new Array("Aim", "Aim", "Advance", "Aim", "Advance", "Rapid Fire", "Rapid Fire");
+        
+        </script>
+            
+        <div data-role="page" id="csm">
+            
+            <div data-role="header">
+                <a data-rel="back" class="ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all backbutton">No text</a>
+                <h1>Chaos Space Marine</h1>
+                <a href="#rightpanel" class="ui-btn ui-icon-info ui-btn-icon-notext ui-corner-all">No text</a>
+            </div><!-- /header -->
+                
+            <div data-role="content">	
+                 <form>
+                    <input type="button" onclick="pickcolumn(0); print_csm();" value="Hidden">
+                    <input type="button" onclick="pickcolumn(1); print_csm();" value="Engaged">
+                    <input type="button" onclick="pickcolumn(2); print_csm();" value="In Cover">
+                    <input type="button" onclick="pickcolumn(3); print_csm();" value="Close">
+                    <input type="button" onclick="pickcolumn(4); print_csm();" value="Other">
+                </form>
+                      
+                <div class="ui-grid-a" style="text-align: center; margin-bottom: 0px">
+                    <div class="ui-block-a">
+                        <h1 class="output" id="d20_csm"></h1>
+                    </div>
+                    
+                    <div class="ui-block-b">
+                        <h2 class="output" id="action_csm"></h2>
+                    </div>
+                </div><!-- /grid-a -->
+        
+                <div class="ui-body ui-corner-all">
+                    <p class="output" id="desc_csm"></p>
+                    <p class="output" id="desc2_csm"></p>
+                    </h3>
+                </div>        
+            </div><!-- /content -->
+        
+            <script>        
+                $( ".backbutton" ).click(function() {
+                    $( ".output" ).empty();
+                });
+            </script>
+        
+        </div>
+    <!-- /page -->
+        
+    <!-- Start of fourth page -->
+    <script>
+            function print_negavolt(){
+                document.getElementById("d20_negavolt").innerHTML = d20;
+                action = actions_negavolt[column][row];
+                document.getElementById("action_negavolt").innerHTML = action;
+                findDescription(action);
+                document.getElementById("desc_negavolt").innerHTML = description;
+                document.getElementById("desc2_negavolt").innerHTML = description2;
+            }
+        
+            var actions_negavolt = new Array();
+            actions_negavolt[0] = new Array("Recharge", "Hold", "Charge", "Charge", "Charge", "Charge", "Rush");
+            actions_negavolt[1] = new Array("Recharge", "Onslaught", "Onslaught", "Onslaught", "Onslaught", "Onslaught", "Fury");
+            actions_negavolt[2] = new Array("Recharge", "Charge", "Charge", "Charge", "Charge", "Charge", "Rush");
+        
+        </script>
+            
+        <div data-role="page" id="negavolt">
+            
+            <div data-role="header">
+                <a data-rel="back" class="ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all backbutton">No text</a>
+                <h1>Negavolt Cultist</h1>
+                <a href="#rightpanel" class="ui-btn ui-icon-info ui-btn-icon-notext ui-corner-all">No text</a>
+            </div><!-- /header -->
+                
+            <div data-role="content">	
+                 <form>
+                    <input type="button" onclick="pickcolumn(0); print_negavolt();" value="Hidden">
+                    <input type="button" onclick="pickcolumn(1); print_negavolt();" value="Engaged">
+                    <input type="button" onclick="pickcolumn(2); print_negavolt();" value="Other">
+                </form>
+                      
+                <div class="ui-grid-a" style="text-align: center; margin-bottom: 0px">
+                    <div class="ui-block-a">
+                        <h1 class="output" id="d20_negavolt"></h1>
+                    </div>
+                    
+                    <div class="ui-block-b">
+                        <h2 class="output" id="action_negavolt"></h2>
+                    </div>
+                </div><!-- /grid-a -->
+        
+                <div class="ui-body ui-corner-all">
+                    <p class="output" id="desc_negavolt"></p>
+                    <p class="output" id="desc2_negavolt"></p>
+                    </h3>
+                </div>        
+            </div><!-- /content -->
+        
+            <script>        
+                $( ".backbutton" ).click(function() {
+                    $( ".output" ).empty();
+                });
+            </script>
+        
+        </div><!-- /page -->
+
+    </body>
+</html>
