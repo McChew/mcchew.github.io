@@ -1,35 +1,783 @@
 <!DOCTYPE html> 
 <html> 
-  
 <head> 
 	<title>Blackstone</title> 
+	
 	<meta name="viewport" content="width=device-width, initial-scale=1"> 
-	<link href="https://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.css" rel="stylesheet" type="text/css" />
-    <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
-    <script src="https://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.js"></script>
+
+    <link rel = "stylesheet" href = "https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+    
+    <script src = "https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    
+    <script src = "https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+    <script id="panel-init">
+		$(function() {
+			$( "body>[data-role='panel']" ).panel();
+		});
+    </script>
+
+    <script>$.mobile.page.prototype.options.theme = "b";</script>
+    
+    <style>
+        .ui-header .ui-title {
+            overflow: visible !important;
+            white-space: normal !important;
+            margin-right: 10%;
+            margin-left: 10%;
+        }
+    </style>
 </head> 
-  
 <body> 
 
-<div data-role="page">
+    <script>
 
-	<div data-role="header">
-		<h1>Hostiles</h1>
-	</div><!-- /header -->
+        var column;
+        var d;
+        var row;
+        var action;
+        var description;
 
-	<div data-role="content">	
-		<a href="https://mcchew.github.io/beastman" data-role="button">Chaos Beastman</a>
-		<a href="https://mcchew.github.io/csm" data-role="button">Chaos Space Marine</a>
-        <a href="https://mcchew.github.io/negavolt" data-role="button">Negavolt Cultist</a>
-        <a href="https://mcchew.github.io/obsidius" data-role="button">Obsidius Mallex</a>
-        <a href="https://mcchew.github.io/psyker" data-role="button">Rogue Psyker</a>
-        <a href="https://mcchew.github.io/spindle" data-role="button">Spindle Drone</a>
-        <a href="https://mcchew.github.io/guard" data-role="button">Traitor Guardsman</a>
-        <a href="https://mcchew.github.io/urghul" data-role="button">Ur-ghul</a> 		
-	</div><!-- /content -->
+        function pickcolumn(c){
+            column = c;
+            d20 = Math.floor(Math.random() * 20) + 1;
+      
+            if (d20 == 20) {
+                row = 6;
+                } else if (d20 <= 19 && d20 >= 16) {
+                row = 5;
+                } else if (d20 <= 15 && d20 >= 13) {
+                row = 4; 
+                } else if (d20 <= 12 && d20 >= 10) {
+                row = 3;
+                } else if (d20 <= 9 && d20 >= 7) {
+                row = 2;
+                } else if (d20 <= 6 && d20 >= 4) {
+                row = 1;
+                } else {
+                row = 0;
+            }
+        }
 
-</div><!-- /page -->
+        function findDescription(a){     
+            if (a == "Advance") {
+                description = "Move towards the closest explorer. Then attack the closest explorer that is in range of and visible to this hostile.";
+                description2= "";
+                description3= "";
+                } else if (a == "Aim") {
+                description = "Attack the furthest explorer that is in range and visble to this hostile. That attack ignores cover.";
+                description2= "";
+                description3= "";
+                } else if (a == "Charge") {
+                description = "Move towards the closest explorer. Then attack an explorer that is adjacent and visible to this hostile. If there are no explorers.";
+                description2= "";
+                description3= "";
+                } else if (a == "Fall Back") {
+                description = "Double this hostile's Move value when they take this action. If this hostile can make a move that ends in a hex that is not visible to any explorers, they do so. If they cannot, they attack the closest explorer that is in range of and visible to this hostile.";
+                description2= "";
+                description3= "";
+                } else if (a == "Hold") {
+                description = "Do nothing.";
+                description2= "";
+                description3= "";
+                } else if (a == "Onslaught") {
+                description = "Attack the closest explorer that is in range of and visible to this hostile. Then attack the closest explorer that is in range of and visible to this hostile (this may be a different target if the first explorer is taken out of action or another explorer is equally close).";
+                description2= "";
+                description3= "";
+                } else if (a == "Sneak") {
+                description = "Make a move that ends as close as possible to an explorer without entering a hex that is visible to any explorers.";
+                description2= "";
+                description3= "";
+                } else if (a == "Fury") {
+                description = "Take an Onslaught action. Re-roll failed attack rolls for that action.";
+                description2= "Onslaught: Attack the closest explorer that is in range of and visible to this hostile. Then attack the closest explorer that is in range of and visible to this hostile (this may be a different target if the first explorer is taken out of action or another explorer is equally close).";
+                description3= "";
+                } else if (a == "Rapid Fire") {
+                description = "Take an Onslaught action. Re-roll failed attack rolls for that action.";
+                description2= "Onslaught: Attack the closest explorer that is in range of and visible to this hostile. Then attack the closest explorer that is in range of and visible to this hostile (this may be a different target if the first explorer is taken out of action or another explorer is equally close).";
+                description3= "";
+                } else if (a == "Rush") {
+                description = "Move towards the closest explorer. Then take a Charge action.";
+                description2= "Charge: Move towards the closest explorer. Then attack an explorer that is adjacent and visible to this hostile. If there are no explorers.";
+                description3= "";
+                } else if (a == "Recharge") {
+                description = "Remove a wound counter from the Negavolt Cultist. If the Negavolt Cultist does not have a wound counter, treat this result as an Advance result instead.";
+                description2= "Advance: Move towards the closest explorer. Then attack the closest explorer that is in range of and visible to this hostile.";
+                description3= "";
+                } else if (a == "Overcharge") {
+                description = "Make an overcharged Plasma Pistol attack against the closest explorer this is in range an visible to Obsidius Mallex.";
+                description2= "";
+                description3= "";
+                } else if (a == "Annihilate") {
+                description = "Place the empowered marker beside the Rouge Psyker. Then attack an explorer that is adjacent and visible to this hostile. Re-roll failed attack rolls for that attack. The Rogue Psyker remains empowered until they suffer a wound or grevious wound.";
+                description2= "";
+                description3= "";
+                } else if (a == "Disrupt") {
+                description = "One unspent activation or destiny dice shoesn by the hostile player is discarded and cannout be spent this turn. If no unspent activation or destiny dice are available, one explorer chosen by the hostile player suffers a wound.";
+                description2= "";
+                description3= "";
+                } else if (a == "Empower") {
+                description = "Place the empowered marker beside the Rogue Psyker. If the Rogue Psyker is already empowered, treat this result as a Disrupt result instead. The Rogue Psyker remains empowered until they suffer a wound or grevious wound.";
+                description2= "Disrupt: One unspent activation or destiny dice shoesn by the hostile player is discarded and cannout be spent this turn. If no unspent activation or destiny dice are available, one explorer chosen by the hostile player suffers a wound.";
+                description3= "";
+                } else if (a == "Regenerate") {
+                description = "Remove a wound counter from the Rogue Psyker. If the Rogue Psyker does not have a wound counter, treat this result as a Disrupt result instead.";
+                description2= "Disrupt: One unspent activation or destiny dice shoesn by the hostile player is discarded and cannout be spent this turn. If no unspent activation or destiny dice are available, one explorer chosen by the hostile player suffers a wound.";
+                description3= "";
+                } else if (a == "Alert") {
+                description = "Increase the threat level by 1 (see the Threat Level special rule on the Spindle Drone reference card) and then take an Onslaught action. If the threat level is 3, take an Onslaught action and re-roll failed attack rolls for that action instead.";
+                description2= "Onslaught: Attack the closest explorer that is in range of and visible to this hostile. Then attack the closest explorer that is in range of and visible to this hostile (this may be a different target if the first explorer is taken out of action or another explorer is equally close).";
+                description3= "";
+                } else if (a == "Pounce") {
+                description = "If there is an explorer adjaacent and visible to this Ur-Ghul, take an Onslaught action. Otherwise, take a Charge action. Re-roll failed attack rolls for whichever action is taken.";
+                description2= "Onslaught: Attack the closest explorer that is in range of and visible to this hostile. Then attack the closest explorer that is in range of and visible to this hostile (this may be a different target if the first explorer is taken out of action or another explorer is equally close).";
+                description3= "Charge: Move towards the closest explorer. Then attack an explorer that is adjacent and visible to this hostile. If there are no explorers.";
+                } else {
+                description = "See hostile's Unique Actions.";
+                description3= "";
+                description2="";
+            }
+            return description;
+            return description2;
+            return description3;
+        }
 
-</body>
-  
+        function reinforceSmall(){
+            r20 = Math.floor(Math.random() * 20) + 1;
+      
+            if (r20 == 1) {
+                reinforce = 6;
+                } else if (r20 == 2) {
+                reinforce = 4;
+                } else if (r20 == 3) {
+                reinforce = 2;
+                } else {
+                reinforce = 0;
+            }
+
+            print_reinforcements()
+        }
+
+        function reinforceLarge(){
+            r20 = Math.floor(Math.random() * 20) + 1;
+      
+            if (r20 == 1) {
+                reinforce = 4;
+                } else if (r20 == 2) {
+                reinforce = 2;
+                } else if (r20 == 3) {
+                reinforce = 1;
+                } else {
+                reinforce = 0;
+            }
+
+            print_reinforcements()
+        }
+
+        function reinforceHuge(){
+            r20 = Math.floor(Math.random() * 20) + 1;
+      
+            if (r20 == 1) {
+                reinforce = 2;
+                } else if (r20 == 2) {
+                reinforce = 1;
+                } else {
+                reinforce = 0;
+            }
+
+            print_reinforcements()
+        }
+
+        function print_reinforcements(){
+            document.getElementById("reinforceRoll").innerHTML = r20;
+            document.getElementById("reinforceNum").innerHTML = reinforce;
+        }
+
+    </script>
+
+    <!-- infopanel  -->
+        <div data-role="panel" id="rightpanel" data-position="right" data-display="overlay" data-theme="b">
+            <p><strong>Hidden:</strong> No line of sight to an explorer.</p>
+            <p><strong>Engaged:</strong> Adjacent to a visible explorer.</p>
+            <p><strong>In Cover:</strong> In cover from all visible explorers <em>(Traitor Guardsman must be armed with a Lasgun)</em>.</p>
+            <p><strong>Close:</strong> Range to the slosest visible explorer is 2 or 3 hexes.</p>
+            <p><strong>Other:</strong> Any other situation.</p>
+            <a data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-left ui-btn-inline">Close</a>
+        </div>
+    <!-- /infopanel -->
+
+    <!-- reinforce panel  -->
+        <div data-role="panel" id="reinforcepanel" data-position="right" data-display="overlay" data-theme="b">
+            <h2>Reinforcements</h3>
+
+                <div class="ui-grid-a" style="text-align: center">
+                    <div class="ui-block-a">
+                        <h3>ROLL:</h3>
+                    </div>
+                    
+                    <div class="ui-block-b">
+                        <h3 class="output" id="reinforceRoll"></h3>
+                    </div>
+                </div><!-- /grid-a -->
+                <div class="ui-grid-a" style="text-align: center">
+                    <div class="ui-block-a">
+                        <h4 class="output" id="reinforceNum"></h4>
+                    </div>
+                    
+                    <div class="ui-block-b">
+                        <h4 >reinforcements</h4>
+                    </div>
+                </div><!-- /grid-2a -->
+
+            <a data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-left ui-btn-inline">Close</a>
+        </div>
+    <!-- /reinforce panel -->
+
+
+    <!-- Start of 1st page -->
+    <div data-role="page" id="hostiles">
+    
+        <div data-role="header">
+            <h1>Hostiles</h1>
+        </div><!-- /header -->
+    
+        <div data-role="content">		
+            <a href="#beastman" data-role="button" data-transition="slidefade">Chaos Beastman</a>
+            <a href="#csm" data-role="button" data-transition="slidefade">Chaos Space Marine</a>
+            <a href="#negavolt" data-role="button" data-transition="slidefade">Negavolt Cultist</a>
+            <a href="#obsidius" data-role="button" data-transition="slidefade">Obsidius Mallex</a>
+            <a href="#psyker" data-role="button" data-transition="slidefade">Rogue Psyker</a>
+            <a href="#spindle" data-role="button" data-transition="slidefade">Spindle Drone</a>
+            <a href="#guard" data-role="button" data-transition="slidefade">Traitor Guardsman</a>
+            <a href="#urghul" data-role="button" data-transition="slidefade">Ur-Ghul</a> 		
+        </div><!-- /content -->
+
+    </div>
+    <!-- /page -->
+    
+    
+    <!-- Start of 2nd page -->
+    <script>
+        function print_beastman(){
+            document.getElementById("d20_beastman").innerHTML = d20;
+            action = actions_beastman[column][row];
+            document.getElementById("action_beastman").innerHTML = action;
+            findDescription(action);
+            document.getElementById("desc_beastman").innerHTML = description;
+            document.getElementById("desc2_beastman").innerHTML = description2;
+        }
+
+        var actions_beastman = new Array();
+        actions_beastman[0] = new Array("Hold", "Advance", "Advance", "Charge", "Charge", "Charge", "Rush");
+        actions_beastman[1] = new Array("Onslaught", "Onslaught", "Onslaught", "Onslaught", "Onslaught", "Fury", "Fury");
+        actions_beastman[2] = new Array("Onslaught", "Onslaught", "Onslaught", "Charge", "Charge", "Charge", "Rush");
+        actions_beastman[3] = new Array("Advance", "Advance", "Advance", "Charge", "Charge", "Charge", "Rush");
+
+    </script>
+    
+    <div data-role="page" id="beastman">
+    
+        <div data-role="header">
+            <a data-rel="back" class="ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all backbutton">No text</a>
+            <h1>Chaos Beastman</h1>
+            <div data-type="horizontal" data-role="controlgroup" class="ui-btn-right">  
+                    <a href="#reinforcepanel" class="ui-btn ui-icon-plus ui-btn-icon-notext ui-corner-all" onclick="reinforceLarge()">No text</a>
+                    <a href="#rightpanel" class="ui-btn ui-icon-info ui-btn-icon-notext ui-corner-all">No text</a>
+            </div>
+            
+        </div><!-- /header -->
+        
+        <div data-role="content">	
+            <form>
+                <input type="button" onclick="pickcolumn(0); print_beastman();" value="Hidden">
+                <input type="button" onclick="pickcolumn(1); print_beastman();" value="Engaged">
+                <input type="button" onclick="pickcolumn(2); print_beastman();" value="Close">
+                <input type="button" onclick="pickcolumn(3); print_beastman();" value="Other">
+              </form>
+              
+            <div class="ui-grid-a" style="text-align: center; height:65px">
+                <div class="ui-block-a">
+                    <h2 class="output" id="d20_beastman"></h2>
+                </div>
+            
+                <div class="ui-block-b">
+                    <h2 class="output" id="action_beastman"></h2>
+                </div>
+            </div><!-- /grid-a -->
+
+            <div class="ui-body ui-corner-all">
+                <p class="output" id="desc_beastman"></p>
+                <p class="output" id="desc2_beastman"></p>
+            </div>        
+            </div><!-- /content -->
+
+            <script>        
+                    $( ".backbutton" ).click(function() {
+                        $( ".output" ).empty();
+                    });
+            </script>
+
+    </div>
+    <!-- /page -->
+
+    <!-- Start of 3rd page -->
+        <script>
+            function print_csm(){
+                document.getElementById("d20_csm").innerHTML = d20;
+                action = actions_csm[column][row];
+                document.getElementById("action_csm").innerHTML = action;
+                findDescription(action);
+                document.getElementById("desc_csm").innerHTML = description;
+                document.getElementById("desc2_csm").innerHTML = description2;
+            }
+        
+            var actions_csm = new Array();
+            actions_csm[0] = new Array("Sneak", "Advance", "Advance", "Charge", "Charge", "Rush", "Rush");
+            actions_csm[1] = new Array("Onslaught", "Onslaught", "Onslaught", "Onslaught", "Onslaught", "Rapid Fire", "Rapid Fire");
+            actions_csm[2] = new Array("Aim", "Onslaught", "Onslaught", "Onslaught", "Advance", "Rapid Fire", "Rapid Fire");
+            actions_csm[3] = new Array("Aim", "Aim", "Onslaught", "Onslaught", "Advance", "Rapid Fire", "Rapid Fire");
+            actions_csm[4] = new Array("Aim", "Aim", "Advance", "Aim", "Advance", "Rapid Fire", "Rapid Fire");
+        
+        </script>
+            
+        <div data-role="page" id="csm">
+            
+            <div data-role="header">
+                <a data-rel="back" class="ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all backbutton">No text</a>
+                <h1>Chaos Space Marine</h1>
+                <div data-type="horizontal" data-role="controlgroup" class="ui-btn-right">  
+                    <a href="#reinforcepanel" class="ui-btn ui-icon-plus ui-btn-icon-notext ui-corner-all" onclick="reinforceLarge()">No text</a>
+                    <a href="#rightpanel" class="ui-btn ui-icon-info ui-btn-icon-notext ui-corner-all">No text</a>
+                </div>
+            </div><!-- /header -->
+                
+            <div data-role="content">	
+                 <form>
+                    <input type="button" onclick="pickcolumn(0); print_csm();" value="Hidden">
+                    <input type="button" onclick="pickcolumn(1); print_csm();" value="Engaged">
+                    <input type="button" onclick="pickcolumn(2); print_csm();" value="In Cover">
+                    <input type="button" onclick="pickcolumn(3); print_csm();" value="Close">
+                    <input type="button" onclick="pickcolumn(4); print_csm();" value="Other">
+                </form>
+                      
+                <div class="ui-grid-a" style="text-align: center; margin-bottom: 0px">
+                    <div class="ui-block-a">
+                        <h1 class="output" id="d20_csm"></h1>
+                    </div>
+                    
+                    <div class="ui-block-b">
+                        <h2 class="output" id="action_csm"></h2>
+                    </div>
+                </div><!-- /grid-a -->
+        
+                <div class="ui-body ui-corner-all">
+                    <p class="output" id="desc_csm"></p>
+                    <p class="output" id="desc2_csm"></p>
+                    </h3>
+                </div>        
+            </div><!-- /content -->
+        
+            <script>        
+                $( ".backbutton" ).click(function() {
+                    $( ".output" ).empty();
+                });
+            </script>
+        
+        </div>
+    <!-- /page -->
+        
+    <!-- Start of 4th page -->
+    <script>
+            function print_negavolt(){
+                document.getElementById("d20_negavolt").innerHTML = d20;
+                action = actions_negavolt[column][row];
+                document.getElementById("action_negavolt").innerHTML = action;
+                findDescription(action);
+                document.getElementById("desc_negavolt").innerHTML = description;
+                document.getElementById("desc2_negavolt").innerHTML = description2;
+            }
+        
+            var actions_negavolt = new Array();
+            actions_negavolt[0] = new Array("Recharge", "Hold",      "Charge",      "Charge",       "Charge",       "Charge",       "Rush");
+            actions_negavolt[1] = new Array("Recharge", "Onslaught", "Onslaught",   "Onslaught",    "Onslaught",    "Onslaught",    "Fury");
+            actions_negavolt[2] = new Array("Recharge", "Charge",    "Charge",      "Charge",       "Charge",       "Charge",       "Rush");
+        
+        </script>
+            
+        <div data-role="page" id="negavolt">
+            
+            <div data-role="header">
+                <a data-rel="back" class="ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all backbutton">No text</a>
+                <h1>Negavolt Cultist</h1>
+                <div data-type="horizontal" data-role="controlgroup" class="ui-btn-right">  
+                    <a href="#reinforcepanel" class="ui-btn ui-icon-plus ui-btn-icon-notext ui-corner-all" onclick="reinforceHuge()">No text</a>
+                    <a href="#rightpanel" class="ui-btn ui-icon-info ui-btn-icon-notext ui-corner-all">No text</a>
+            </div>
+            </div><!-- /header -->
+                
+            <div data-role="content">	
+                 <form>
+                    <input type="button" onclick="pickcolumn(0); print_negavolt();" value="Hidden">
+                    <input type="button" onclick="pickcolumn(1); print_negavolt();" value="Engaged">
+                    <input type="button" onclick="pickcolumn(2); print_negavolt();" value="Other">
+                </form>
+                      
+                <div class="ui-grid-a" style="text-align: center; margin-bottom: 0px">
+                    <div class="ui-block-a">
+                        <h1 class="output" id="d20_negavolt"></h1>
+                    </div>
+                    
+                    <div class="ui-block-b">
+                        <h2 class="output" id="action_negavolt"></h2>
+                    </div>
+                </div><!-- /grid-a -->
+        
+                <div class="ui-body ui-corner-all">
+                    <p class="output" id="desc_negavolt"></p>
+                    <p class="output" id="desc2_negavolt"></p>
+                    </h3>
+                </div>        
+            </div><!-- /content -->
+        
+            <script>        
+                $( ".backbutton" ).click(function() {
+                    $( ".output" ).empty();
+                });
+            </script>
+        
+        </div><!-- /page -->
+
+            <!-- Start of 5th page -->
+            <script>
+                function print_obsidius(){
+                    document.getElementById("d20_obsidius").innerHTML = d20;
+                    action = actions_obsidius[column][row];
+                    document.getElementById("action_obsidius").innerHTML = action;
+                    findDescription(action);
+                    document.getElementById("desc_obsidius").innerHTML = description;
+                    document.getElementById("desc2_obsidius").innerHTML = description2;
+                }
+            
+                var actions_obsidius = new Array();
+                actions_obsidius[0] = new Array("Sneak",        "Advance",      "Advance",      "Charge",       "Rush",     "Rush",         "Rush");
+                actions_obsidius[1] = new Array("Onslaught",    "Onslaught",    "Onslaught",    "Onslaught",    "Fury",     "Fury",         "Fury");
+                actions_obsidius[2] = new Array("Onslaught",    "Onslaught",    "Charge",       "Charge",       "Charge",   "Overcharge",   "Overcharge");
+                actions_obsidius[3] = new Array("Charge",       "Charge",       "Aim",          "Onslaught",    "Advance",  "Overcharge",   "Rush");
+                actions_obsidius[4] = new Array("Advance",      "Advance",      "Aim",          "Onslaught",    "Onslaught","Overcharge",   "Rush");
+            
+            </script>
+                
+            <div data-role="page" id="obsidius">
+                
+                <div data-role="header">
+                    <a data-rel="back" class="ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all backbutton">No text</a>
+                    <h1>Chaos Space Marine</h1>
+                    <div data-type="horizontal" data-role="controlgroup" class="ui-btn-right">  
+                        <a href="#reinforcepanel" class="ui-btn ui-icon-plus ui-btn-icon-notext ui-corner-all" onclick="reinforceHuge()">No text</a>
+                        <a href="#rightpanel" class="ui-btn ui-icon-info ui-btn-icon-notext ui-corner-all">No text</a>
+                    </div>
+                </div><!-- /header -->
+                    
+                <div data-role="content">	
+                     <form>
+                        <input type="button" onclick="pickcolumn(0); print_obsidius();" value="Hidden">
+                        <input type="button" onclick="pickcolumn(1); print_obsidius();" value="Engaged">
+                        <input type="button" onclick="pickcolumn(2); print_obsidius();" value="Close">
+                        <input type="button" onclick="pickcolumn(3); print_obsidius();" value="Other">
+                    </form>
+                          
+                    <div class="ui-grid-a" style="text-align: center; margin-bottom: 0px">
+                        <div class="ui-block-a">
+                            <h1 class="output" id="d20_obsidius"></h1>
+                        </div>
+                        
+                        <div class="ui-block-b">
+                            <h2 class="output" id="action_obsidius"></h2>
+                        </div>
+                    </div><!-- /grid-a -->
+            
+                    <div class="ui-body ui-corner-all">
+                        <p class="output" id="desc_obsidius"></p>
+                        <p class="output" id="desc2_obsidius"></p>
+                        </h3>
+                    </div>        
+                </div><!-- /content -->
+            
+                <script>        
+                    $( ".backbutton" ).click(function() {
+                        $( ".output" ).empty();
+                    });
+                </script>
+            
+            </div>
+        <!-- /page -->
+
+        <!-- Start of 6th page -->
+            <script>
+                function print_psyker(){
+                    document.getElementById("d20_psyker").innerHTML = d20;
+                    action = actions_psyker[column][row];
+                    document.getElementById("action_psyker").innerHTML = action;
+                    findDescription(action);
+                    document.getElementById("desc_psyker").innerHTML = description;
+                    document.getElementById("desc2_psyker").innerHTML = description2;
+                }
+
+                var actions_psyker = new Array();
+                actions_psyker[0] = new Array("Hold", "Hold", "Hold", "Disrupt", "Disrupt", "Regenerate", "Empower");
+                actions_psyker[1] = new Array("Fall Back", "Fall Back", "Onslaught", "Onslaught", "Onslaught", "Annihilate", "Annihilate");
+                actions_psyker[2] = new Array("Fall Back", "Disrupt", "Disrupt", "Onslaught", "Onslaught", "Regenerate", "Empower");
+                actions_psyker[3] = new Array("Hold", "Disrupt", "Disrupt", "Onslaught", "Onslaught", "Regenerate", "Empower");
+
+            </script>
+            
+            <div data-role="page" id="psyker">
+            
+                <div data-role="header">
+                    <a data-rel="back" class="ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all backbutton">No text</a>
+                    <h1>Rogue Psyker</h1>
+                    <div data-type="horizontal" data-role="controlgroup" class="ui-btn-right">  
+                            <a href="#reinforcepanel" class="ui-btn ui-icon-plus ui-btn-icon-notext ui-corner-all" onclick="reinforceLarge()">No text</a>
+                            <a href="#rightpanel" class="ui-btn ui-icon-info ui-btn-icon-notext ui-corner-all">No text</a>
+                    </div>
+                    
+                </div><!-- /header -->
+                
+                <div data-role="content">	
+                    <form>
+                        <input type="button" onclick="pickcolumn(0); print_psyker();" value="Hidden">
+                        <input type="button" onclick="pickcolumn(1); print_psyker();" value="Engaged">
+                        <input type="button" onclick="pickcolumn(2); print_psyker();" value="Close">
+                        <input type="button" onclick="pickcolumn(3); print_psyker();" value="Other">
+                    </form>
+                    
+                    <div class="ui-grid-a" style="text-align: center; height:65px">
+                        <div class="ui-block-a">
+                            <h2 class="output" id="d20_psyker"></h2>
+                        </div>
+                    
+                        <div class="ui-block-b">
+                            <h2 class="output" id="action_psyker"></h2>
+                        </div>
+                    </div><!-- /grid-a -->
+
+                    <div class="ui-body ui-corner-all">
+                        <p class="output" id="desc_psyker"></p>
+                        <p class="output" id="desc2_psyker"></p>
+                    </div>        
+                    </div><!-- /content -->
+
+                    <script>        
+                            $( ".backbutton" ).click(function() {
+                                $( ".output" ).empty();
+                            });
+                    </script>
+
+            </div>
+        <!-- /page -->
+
+        <!-- Start of 7th page -->
+        <script>
+            function print_spindle(){
+                document.getElementById("d20_spindle").innerHTML = d20;
+                action = actions_spindle[column][row];
+                document.getElementById("action_spindle").innerHTML = action;
+                findDescription(action);
+                document.getElementById("desc_spindle").innerHTML = description;
+                document.getElementById("desc2_spindle").innerHTML = description2;
+            }
+        
+            var actions_spindle = new Array();
+            actions_spindle[0] = new Array("Hold", "Sneak", "Sneak", "Sneak", "Advance", "Advance", "Alert");
+            actions_spindle[1] = new Array("Fall Back", "Fall Back", "Onslaught", "Onslaught", "Onslaught", "Onslaught", "Alert");
+            actions_spindle[2] = new Array("Aim", "Aim", "Onslaught", "Onslaught", "Onslaught", "Onslaught", "Alert");
+            actions_spindle[3] = new Array("Fall Back", "Aim", "Aim", "Onslaught", "Onslaught", "Onslaught", "Alert");
+            actions_spindle[4] = new Array("Fall Back", "Aim", "Aim", "Onslaught", "Onslaught", "Advance", "Alert");
+        
+        </script>
+            
+        <div data-role="page" id="spindle">
+            
+            <div data-role="header">
+                <a data-rel="back" class="ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all backbutton">No text</a>
+                <h1>Spindle Drone</h1>
+                <div data-type="horizontal" data-role="controlgroup" class="ui-btn-right">  
+                    <a href="#reinforcepanel" class="ui-btn ui-icon-plus ui-btn-icon-notext ui-corner-all" onclick="reinforceSmall()">No text</a>
+                    <a href="#rightpanel" class="ui-btn ui-icon-info ui-btn-icon-notext ui-corner-all">No text</a>
+                </div>
+            </div><!-- /header -->
+                
+            <div data-role="content">	
+                    <form>
+                    <input type="button" onclick="pickcolumn(0); print_spindle();" value="Hidden">
+                    <input type="button" onclick="pickcolumn(1); print_spindle();" value="Engaged">
+                    <input type="button" onclick="pickcolumn(2); print_spindle();" value="In Cover">
+                    <input type="button" onclick="pickcolumn(3); print_spindle();" value="Close">
+                    <input type="button" onclick="pickcolumn(4); print_spindle();" value="Other">
+                </form>
+                        
+                <div class="ui-grid-a" style="text-align: center; margin-bottom: 0px">
+                    <div class="ui-block-a">
+                        <h1 class="output" id="d20_spindle"></h1>
+                    </div>
+                    
+                    <div class="ui-block-b">
+                        <h2 class="output" id="action_spindle"></h2>
+                    </div>
+                </div><!-- /grid-a -->
+        
+                <div class="ui-body ui-corner-all">
+                    <p class="output" id="desc_spindle"></p>
+                    <p class="output" id="desc2_spindle"></p>
+                    </h3>
+                </div>        
+            </div><!-- /content -->
+        
+            <script>        
+                $( ".backbutton" ).click(function() {
+                    $( ".output" ).empty();
+                });
+            </script>
+        
+        </div>
+    <!-- /page -->
+    
+    <!-- Start of 8th page -->
+    <script>
+            function print_guard(){
+                document.getElementById("d20_guard").innerHTML = d20;
+                action = actions_guard[column][row];
+                document.getElementById("action_guard").innerHTML = action;
+                findDescription(action);
+                document.getElementById("desc_guard").innerHTML = description;
+                document.getElementById("desc2_guard").innerHTML = description2;
+            }
+        
+            var actions_guard = new Array();
+            actions_guard[0] = new Array("Hold", "Sneak", "Advance", "Advance", "Charge", "Charge", "Rush");
+            actions_guard[1] = new Array("Fall Back", "Onslaught", "Onslaught", "Onslaught", "Onslaught", "Onslaught", "Fury");
+            actions_guard[2] = new Array("Aim", "Aim", "Aim", "Onslaught", "Onslaught", "Onslaught", "Fury");
+            actions_guard[3] = new Array("Fall Back", "Onslaught", "Onslaught", "Charge", "Charge", "Charge", "Fury");
+            actions_guard[4] = new Array("Advance", "Advance", "Aim", "Aim", "Onslaught", "Onslaught", "Rush");
+        
+        </script>
+            
+        <div data-role="page" id="guard">
+            
+            <div data-role="header">
+                <a data-rel="back" class="ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all backbutton">No text</a>
+                <h1>Traitor Guardsman</h1>
+                <div data-type="horizontal" data-role="controlgroup" class="ui-btn-right">  
+                    <a href="#reinforcepanel" class="ui-btn ui-icon-plus ui-btn-icon-notext ui-corner-all" onclick="reinforceSmall()">No text</a>
+                    <a href="#rightpanel" class="ui-btn ui-icon-info ui-btn-icon-notext ui-corner-all">No text</a>
+                </div>
+            </div><!-- /header -->
+                
+            <div data-role="content">	
+                    <form>
+                    <input type="button" onclick="pickcolumn(0); print_guard();" value="Hidden">
+                    <input type="button" onclick="pickcolumn(1); print_guard();" value="Engaged">
+                    <input type="button" onclick="pickcolumn(2); print_guard();" value="In Cover">
+                    <input type="button" onclick="pickcolumn(3); print_guard();" value="Close">
+                    <input type="button" onclick="pickcolumn(4); print_guard();" value="Other">
+                </form>
+                        
+                <div class="ui-grid-a" style="text-align: center; margin-bottom: 0px">
+                    <div class="ui-block-a">
+                        <h1 class="output" id="d20_guard"></h1>
+                    </div>
+                    
+                    <div class="ui-block-b">
+                        <h2 class="output" id="action_guard"></h2>
+                    </div>
+                </div><!-- /grid-a -->
+        
+                <div class="ui-body ui-corner-all">
+                    <p class="output" id="desc_guard"></p>
+                    <p class="output" id="desc2_guard"></p>
+                    </h3>
+                </div>        
+            </div><!-- /content -->
+        
+            <script>        
+                $( ".backbutton" ).click(function() {
+                    $( ".output" ).empty();
+                });
+            </script>
+        
+        </div>
+    <!-- /page -->            
+            
+    <!-- Start of 9th page -->
+    <script>
+        function print_urghul(){
+            document.getElementById("d20_urghul").innerHTML = d20;
+            action = actions_urghul[column][row];
+            document.getElementById("action_urghul").innerHTML = action;
+            findDescription(action);
+            document.getElementById("desc_urghul").innerHTML = description;
+            document.getElementById("desc2_urghul").innerHTML = description2;
+            document.getElementById("desc3_urghul").innerHTML = description3;
+
+        }
+
+        var actions_urghul = new Array();
+        actions_urghul[0] = new Array("Hold", "Sneak", "Sneak", "Charge", "Charge", "Charge", "Rush");
+        actions_urghul[1] = new Array("Fall Back", "Fall Back", "Onslaught", "Onslaught", "Onslaught", "Onslaught", "Pounce");
+        actions_urghul[2] = new Array("Fall Back", "Fall Back", "Charge", "Charge", "Charge", "Charge", "Pounce");
+        actions_urghul[3] = new Array("Fall Back", "Fall Back", "Fall Back", "Rush", "Rush", "Rush", "Rush");
+
+    </script>
+    
+    <div data-role="page" id="urghul">
+    
+        <div data-role="header">
+            <a data-rel="back" class="ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all backbutton">No text</a>
+            <h1>Ur-Ghul</h1>
+            <div data-type="horizontal" data-role="controlgroup" class="ui-btn-right">  
+                    <a href="#reinforcepanel" class="ui-btn ui-icon-plus ui-btn-icon-notext ui-corner-all" onclick="reinforceSmall()">No text</a>
+                    <a href="#rightpanel" class="ui-btn ui-icon-info ui-btn-icon-notext ui-corner-all">No text</a>
+            </div>
+            
+        </div><!-- /header -->
+        
+        <div data-role="content">	
+            <form>
+                <input type="button" onclick="pickcolumn(0); print_urghul();" value="Hidden">
+                <input type="button" onclick="pickcolumn(1); print_urghul();" value="Engaged">
+                <input type="button" onclick="pickcolumn(2); print_urghul();" value="Close">
+                <input type="button" onclick="pickcolumn(3); print_urghul();" value="Other">
+                </form>
+                
+            <div class="ui-grid-a" style="text-align: center; height:65px">
+                <div class="ui-block-a">
+                    <h2 class="output" id="d20_urghul"></h2>
+                </div>
+            
+                <div class="ui-block-b">
+                    <h2 class="output" id="action_urghul"></h2>
+                </div>
+            </div><!-- /grid-a -->
+
+            <div class="ui-body ui-corner-all">
+                <p class="output" id="desc_urghul"></p>
+                <p class="output" id="desc2_urghul"></p>
+                <p class="output" id="desc3_urghul"></p>
+
+            </div>        
+            </div><!-- /content -->
+
+            <script>        
+                    $( ".backbutton" ).click(function() {
+                        $( ".output" ).empty();
+                    });
+            </script>
+
+    </div>
+    <!-- /page -->
+        
+    
+    
+
+    </body>
 </html>
