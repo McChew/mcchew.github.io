@@ -37,7 +37,8 @@
         var row;
         var action;
         var description;
-
+        
+        // choose column on behavior table and roll d20
         function pickcolumn(c){
             column = c;
             d20 = Math.floor(Math.random() * 20) + 1;
@@ -58,11 +59,11 @@
                 row = 0;
             }
         }
-
+        
+        // action descriptions
         function findDescription(a){     
             if (a == "Advance") {
-                description = "Move towards the closest explorer. Then attack the closest explorer that is in range of and visible to this "+
-                "hostile.";
+                description = "Move towards the closest explorer. Then attack the closest explorer that is in range of and visible to this hostile.";
                 description2= "";
                 description3= "";
                 } else if (a == "Aim") {
@@ -70,14 +71,11 @@
                 description2= "";
                 description3= "";
                 } else if (a == "Charge") {
-                description = "Move towards the closest explorer. Then attack an explorer that is adjacent and visible to this hostile. "+
-                "If there are no explorers.";
+                description = "Move towards the closest explorer. Then attack an explorer that is adjacent and visible to this hostile. If there are no explorers adjacent and visible to this hostile, move towards the closest explorer a second time.";
                 description2= "";
                 description3= "";
                 } else if (a == "Fall Back") {
-                description = "Double this hostile's Move value when they take this action. If this hostile can make a move that ends in "+
-                "hex that is not visible to any explorers, they do so. If they cannot, they attack the closest explorer that is in range "+
-                "of and visible to this hostile.";
+                description = "Double this hostile's Move value when they take this action. If this hostile can make a move that ends in hex that is not visible to any explorers, they do so. If they cannot, they attack the closest explorer that is in range of and visible to this hostile.";
                 description2= "";
                 description3= "";
                 } else if (a == "Hold") {
@@ -85,9 +83,7 @@
                 description2= "";
                 description3= "";
                 } else if (a == "Onslaught") {
-                description = "Attack the closest explorer that is in range of and visible to this hostile. Then attack the closest "+
-                "explorer that is in range of and visible to this hostile (this may be a different target if the first explorer is taken "+
-                "out of action or another explorer is equally close).";
+                description = "Attack the closest explorer that is in range of and visible to this hostile. Then attack the closest explorer that is in range of and visible to this hostile (this may be a different target if the first explorer is taken out of action or another explorer is equally close).";
                 description2= "";
                 description3= "";
                 } else if (a == "Sneak") {
@@ -104,7 +100,7 @@
                 description3= "";
                 } else if (a == "Rush") {
                 description = "Move towards the closest explorer. Then take a Charge action.";
-                description2= "Charge: Move towards the closest explorer. Then attack an explorer that is adjacent and visible to this hostile. If there are no explorers.";
+                description2= "Charge: Move towards the closest explorer. Then attack an explorer that is adjacent and visible to this hostile. If there are no explorers adjacent and visible to this hostile, move towards the closest explorer a second time.";
                 description3= "";
                 } else if (a == "Recharge") {
                 description = "Remove a wound counter from the Negavolt Cultist. If the Negavolt Cultist does not have a wound counter, treat this result as an Advance result instead.";
@@ -137,7 +133,7 @@
                 } else if (a == "Pounce") {
                 description = "If there is an explorer adjaacent and visible to this Ur-Ghul, take an Onslaught action. Otherwise, take a Charge action. Re-roll failed attack rolls for whichever action is taken.";
                 description2= "Onslaught: Attack the closest explorer that is in range of and visible to this hostile. Then attack the closest explorer that is in range of and visible to this hostile (this may be a different target if the first explorer is taken out of action or another explorer is equally close).";
-                description3= "Charge: Move towards the closest explorer. Then attack an explorer that is adjacent and visible to this hostile. If there are no explorers.";
+                description3= "Charge: Move towards the closest explorer. Then attack an explorer that is adjacent and visible to this hostile. If there are no explorers adjacent and visible to this hostile, move towards the closest explorer a second time.";
                 } else {
                 description = "See hostile's Unique Actions.";
                 description3= "";
@@ -148,6 +144,7 @@
             return description3;
         }
 
+        // small hostile reinforments
         function reinforceSmall(){
             r20 = Math.floor(Math.random() * 20) + 1;
       
@@ -164,6 +161,7 @@
             print_reinforcements()
         }
 
+        // large hostile reinforments
         function reinforceLarge(){
             r20 = Math.floor(Math.random() * 20) + 1;
       
@@ -180,6 +178,7 @@
             print_reinforcements()
         }
 
+        // huge hostile reinforcements
         function reinforceHuge(){
             r20 = Math.floor(Math.random() * 20) + 1;
       
@@ -194,41 +193,37 @@
             print_reinforcements()
         }
 
+        // print reinforements
         function print_reinforcements(){
             document.getElementById("reinforceRoll").innerHTML = r20;
             document.getElementById("reinforceNum").innerHTML = reinforce;
         }
 
+        // Event roll
         function eventRoll(){
             e20 = Math.floor(Math.random() * 20) + 1;
       
             if (e20 == 1) {
                 eTitle = "All is Dust";
-                eDesc = "If any discovery markers are still on the battlefield, the leader must discard one of them. If there are "+
-                "no discovery markers, each explorer loses 1 inspiration point, to a minimum of 0."
+                eDesc = "If any discovery markers are still on the battlefield, the leader must discard one of them. If there are no discovery markers, each explorer loses 1 inspiration point, to a minimum of 0."
                 } else if (e20 <= 3) {
                 eTitle = "Unfufilled Destiny";
                 eDesc = "Do not make a destiny roll at the start of the next turn."
                 } else if (e20 <= 6) {
                 eTitle = "Not Dead Yet";
-                eDesc = "The leader must pick one hostile that was slain during the combat and has not returned to the battlefield, "+
-                "and then deploy them as close to an explorer as possible."
+                eDesc = "The leader must pick one hostile that was slain during the combat and has not returned to the battlefield, and then deploy them as close to an explorer as possible."
                 } else if (e20 <= 10) {
                 eTitle = "Changing Conditions";
                 eDesc = "Draw an encounter card. If the card has a twist, it applies for the rest of the combat. If not, there is no effect."
                 } else if (e20 <= 14) {
                 eTitle = "Escape Chamber";
-                eDesc = "The leader replaces the portal furthest from any explorer with a maglev transport escape chamber. If more than "+
-                "one portal is equally far from the explorers, the leader can pick which one to replace. If this event had already been "+
-                "rolled, or if an explorer has used a Summon action, there is no effect."
+                eDesc = "The leader replaces the portal furthest from any explorer with a maglev transport escape chamber. If more than one portal is equally far from the explorers, the leader can pick which one to replace. If this event had already been rolled, or if an explorer has used a Summon action, there is no effect."
                 } else if (e20 <= 17) {
                 eTitle = "Inspiration";
                 eDesc = "The leader picks an explorer. That explorer receives 1 inspiration point."
                 } else if (e20 <= 19) {
                 eTitle = "Heroic Effort";
-                eDesc = "The leader picks an explorer that is out of action. Deploy the explorer in the same hex as another explorer or "+
-                "as close to another explorer as possible, and then make a vitality roll for them. If no explorers are out of action, the "+
-                "leader picks an explorer. Make a vitality roll for that explorer."
+                eDesc = "The leader picks an explorer that is out of action. Deploy the explorer in the same hex as another explorer or as close to another explorer as possible, and then make a vitality roll for them. If no explorers are out of action, the leader picks an explorer. Make a vitality roll for that explorer."
                 } else {
                 eTitle = "Lucky find";
                 eDesc = "The leader picks an explorer. That explorer draws a discovery card."
@@ -242,7 +237,7 @@
 
     </script>
 
-    <!-- infopanel  -->
+    <!-- infopanel of behavior table definitions -->
         <div data-role="panel" id="rightpanel" data-position="right" data-display="overlay" data-theme="b">
             <p><strong>Hidden:</strong> No line of sight to an explorer.</p>
             <p><strong>Engaged:</strong> Adjacent to a visible explorer.</p>
@@ -253,7 +248,7 @@
         </div>
     <!-- /infopanel -->
 
-    <!-- reinforce panel  -->
+    <!-- reinforcement panel  -->
         <div data-role="panel" id="reinforcepanel" data-position="right" data-display="overlay" data-theme="b">
             <h2>Reinforcements</h3>
 
@@ -278,7 +273,7 @@
 
             <a data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-left ui-btn-inline">Close</a>
         </div>
-    <!-- /reinforce panel -->
+    <!-- /reinforcement panel -->
 
     <!-- event panel  -->
         <div data-role="panel" id="eventpanel" data-position="right" data-display="overlay" data-theme="b">
@@ -300,18 +295,21 @@
 
             <a data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-left ui-btn-inline">Close</a>
         </div>
-    <!-- /reinforce panel -->
+    <!-- /event panel -->
 
 
 
     <!-- Start of 1st page -->
     <div data-role="page" id="hostiles">
-    
+
+        <!-- header-->
         <div data-role="header">
             <h1>Hostiles</h1>
             <a href="#eventpanel" class="ui-btn ui-icon-warning ui-corner-all ui-btn-right" onclick="eventRoll()">Event</a>
-        </div><!-- /header -->
+        </div>
+        <!-- /header -->
     
+        <!-- content -->
         <div data-role="content">		
             <a href="#beastman" data-role="button" data-transition="slidefade">Chaos Beastman</a>
             <a href="#csm" data-role="button" data-transition="slidefade">Chaos Space Marine</a>
@@ -321,7 +319,8 @@
             <a href="#spindle" data-role="button" data-transition="slidefade">Spindle Drone</a>
             <a href="#guard" data-role="button" data-transition="slidefade">Traitor Guardsman</a>
             <a href="#urghul" data-role="button" data-transition="slidefade">Ur-Ghul</a> 		
-        </div><!-- /content -->
+        </div>
+        <!-- /content -->
 
     </div>
     <!-- /page -->
@@ -329,6 +328,8 @@
     
     <!-- Start of 2nd page -->
     <script>
+
+        // print  beastman d20, action, desctiption
         function print_beastman(){
             document.getElementById("d20_beastman").innerHTML = d20;
             action = actions_beastman[column][row];
@@ -338,6 +339,7 @@
             document.getElementById("desc2_beastman").innerHTML = description2;
         }
 
+        // beastman behavior table
         var actions_beastman = new Array();
         actions_beastman[0] = new Array("Hold", "Advance", "Advance", "Charge", "Charge", "Charge", "Rush");
         actions_beastman[1] = new Array("Onslaught", "Onslaught", "Onslaught", "Onslaught", "Onslaught", "Fury", "Fury");
@@ -348,16 +350,19 @@
     
     <div data-role="page" id="beastman">
     
+        <!-- header-->
         <div data-role="header">
             <a data-rel="back" class="ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all backbutton">No text</a>
             <h1>Chaos Beastman</h1>
             <div data-type="horizontal" data-role="controlgroup" class="ui-btn-right">  
-                    <a href="#reinforcepanel" class="ui-btn ui-icon-plus ui-btn-icon-notext ui-corner-all" onclick="reinforceLarge()">No text</a>
+                    <a href="#reinforcepanel" class="ui-btn ui-icon-plus ui-btn-icon-notext ui-corner-all" onclick="reinforceLarge()"></a>
                     <a href="#rightpanel" class="ui-btn ui-icon-info ui-btn-icon-notext ui-corner-all">No text</a>
             </div>
             
-        </div><!-- /header -->
+        </div>
+        <!-- /header -->
         
+        <!--content-->
         <div data-role="content">	
             <form>
                 <input type="button" onclick="pickcolumn(0); print_beastman();" value="Hidden">
@@ -365,22 +370,25 @@
                 <input type="button" onclick="pickcolumn(2); print_beastman();" value="Close">
                 <input type="button" onclick="pickcolumn(3); print_beastman();" value="Other">
               </form>
-              
+            
+            <!-- grid-a -->
             <div class="ui-grid-a" style="text-align: center; height:65px">
                 <div class="ui-block-a">
                     <h2 class="output" id="d20_beastman"></h2>
                 </div>
-            
                 <div class="ui-block-b">
                     <h2 class="output" id="action_beastman"></h2>
                 </div>
-            </div><!-- /grid-a -->
+            </div>
+            <!-- /grid-a -->
 
+            <!-- print action description-->
             <div class="ui-body ui-corner-all">
                 <p class="output" id="desc_beastman"></p>
                 <p class="output" id="desc2_beastman"></p>
             </div>        
-            </div><!-- /content -->
+            </div>
+            <!-- /content -->
 
             <script>        
                     $( ".backbutton" ).click(function() {
