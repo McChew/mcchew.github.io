@@ -37,12 +37,23 @@
         var row;
         var action;
         var description;
-        
+
+/*         function randomorg(url){
+            $.ajax({
+                "type": "GET",
+                "url": "http://www.random.org/integers/?num=1&min=1&max=20&col=1&base=10&format=plain&rnd=new",
+                "success": function( data, status, xhr ){
+                    dice = parseInt( data );
+                }
+            });      
+            return dice;
+        }
+ */        
         // choose column on behavior table and roll d20
         function pickcolumn(c){
             column = c;
             d20 = Math.floor(Math.random() * 20) + 1;
-      
+            //d20 = dice
             if (d20 == 20) {
                 row = 6;
                 } else if (d20 <= 19 && d20 >= 16) {
@@ -59,6 +70,29 @@
                 row = 0;
             }
         }
+
+        // choose column on behavior table and roll d20
+        function pickcolumn_ambull(c){
+            column = c;
+            d20 = Math.floor(Math.random() * 20) + 1;
+            //d20 = dice
+            if (d20 <= 20 && d20 >= 18) {
+                row = 6;
+                } else if (d20 <= 17 && d20 >= 16) {
+                row = 5;
+                } else if (d20 <= 15 && d20 >= 13) {
+                row = 4; 
+                } else if (d20 <= 12 && d20 >= 10) {
+                row = 3;
+                } else if (d20 <= 9 && d20 >= 7) {
+                row = 2;
+                } else if (d20 <= 6 && d20 >= 4) {
+                row = 1;
+                } else {
+                row = 0;
+            }
+        }
+
         
         // action descriptions
         function findDescription(a){     
@@ -131,13 +165,25 @@
                 description2= "Onslaught: Attack the closest explorer that is in range of and visible to this hostile. Then attack the closest explorer that is in range of and visible to this hostile (this may be a different target if the first explorer is taken out of action or another explorer is equally close).";
                 description3= "";
                 } else if (a == "Pounce") {
-                description = "If there is an explorer adjaacent and visible to this Ur-Ghul, take an Onslaught action. Otherwise, take a Charge action. Re-roll failed attack rolls for whichever action is taken.";
+                description = "If there is an explorer adjacent and visible to this Ur-Ghul, take an Onslaught action. Otherwise, take a Charge action. Re-roll failed attack rolls for whichever action is taken.";
                 description2= "Onslaught: Attack the closest explorer that is in range of and visible to this hostile. Then attack the closest explorer that is in range of and visible to this hostile (this may be a different target if the first explorer is taken out of action or another explorer is equally close).";
                 description3= "Charge: Move towards the closest explorer. Then attack an explorer that is adjacent and visible to this hostile. If there are no explorers adjacent and visible to this hostile, move towards the closest explorer a second time.";
+                } else if (a == "Tunnel (Ambull)") {
+                description = "Remove the Ambull from the battlefield and place the Ambull location marker on the hex it was removed from - any remaining actions during this activation are lost. The next time the initiative card for the Ambull is reached, do not roll on the behavior table for the Ambull's first action. Instead, the Ambull is placed in a hex as close as possible to the explorer that it closest to the Ambull location marker. Once the Ambull has been placed, remove the Ambull location marker and reoll for the Ambull's second action as normal.";
+                description2= "" 
+                } else if (a == "Swipe") {
+                description = "Make an attack against each explorer that is adjacent and visible to the Ambull.";
+                description2= "";
+                } else if (a == "Tunnel (Borewyrm)") {
+                description = "Remove the Borewyrm Infestayion from the board and place it in the same hex as the discovery marker that is furthest from any explorers or othe hostiles (other than the Ambull or any other Borewyrm Infestations). If this is not possible, treat this result as a Sneak result instead.";
+                description2= "Sneak: Make a move that ends as close as possible to an explorer without entering a hex that is visible to any explorers.";
+                } else if (a == "Consume") {
+                description = "Double this hostile's Move value when they take this action. Move the Borewyrm Infestation towards the nearest discovery marker. If it finishes this move in a hex with a discovery marker, remove the discovery marker, then remove any wound counters next to this Borewyrm Infestation. If ther are no discovery markers, or the only discovery markers on the board are showing the '?' side, treat this result as a Sneak result instead.";
+                description2 = "Sneak: Make a move that ends as close as possible to an explorer without entering a hex that is visible to any explorers.";
                 } else {
                 description = "See hostile's Unique Actions.";
                 description3= "";
-                description2="";
+                description2= "";
             }
             return description;
             return description2;
@@ -242,11 +288,24 @@
             <p><strong>Hidden:</strong> No line of sight to an explorer.</p>
             <p><strong>Engaged:</strong> Adjacent to a visible explorer.</p>
             <p><strong>In Cover:</strong> In cover from all visible explorers <em>(Traitor Guardsman must be armed with a Lasgun)</em>.</p>
-            <p><strong>Close:</strong> Range to the slosest visible explorer is 2 or 3 hexes.</p>
+            <p><strong>Close:</strong> Range to the closest visible explorer is 2 or 3 hexes.</p>
             <p><strong>Other:</strong> Any other situation.</p>
             <a data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-left ui-btn-inline">Close</a>
         </div>
     <!-- /infopanel -->
+
+    <!-- infopanel of behavior table definitions for AMBULL-->
+    <div data-role="panel" id="ambullpanel" data-position="right" data-display="overlay" data-theme="b">
+            <p><strong>Hidden:</strong> No line of sight to an explorer.</p>
+            <p><strong>Engaged:</strong> Adjacent to a visible explorer.</p>
+            <p><strong>Close:</strong> Range to the slosest visible explorer is 2 or 3 hexes.</p>
+            <p><strong>Protective:</strong> An explorer is adjacent to 1 or more Borewyrm Infestations.</p>
+            <p><strong>Enraged:</strong> An explorer is carrying 1 or more egg counters.</p>
+            <p><strong>Other:</strong> Any other situation.</p>
+            <a data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-left ui-btn-inline">Close</a>
+        </div>
+    <!-- /infopanel -->
+    
 
     <!-- reinforcement panel  -->
         <div data-role="panel" id="reinforcepanel" data-position="right" data-display="overlay" data-theme="b">
@@ -318,7 +377,17 @@
             <a href="#psyker" data-role="button" data-transition="slidefade">Rogue Psyker</a>
             <a href="#spindle" data-role="button" data-transition="slidefade">Spindle Drone</a>
             <a href="#guard" data-role="button" data-transition="slidefade">Traitor Guardsman</a>
-            <a href="#urghul" data-role="button" data-transition="slidefade">Ur-Ghul</a> 		
+            <a href="#urghul" data-role="button" data-transition="slidefade">Ur-Ghul</a> 	
+            
+            <div data-role="collapsible" data-collapsed-icon="carat-d" data-expanded-icon="carat-u">
+                <h4>The Dreaded Ambull</h4>
+                <ul data-role="listview">
+                    <li data-icon="false"><a href = "#ambull" data-transition="slidefade">Ambull</a></li>
+                    <li data-icon="false"><a href = "#ambull_enraged" data-transition="slidefade">Ambull Enraged</a></li>
+                    <li data-icon="false"><a href = "#borewyrm" data-transition="slidefade">Borewyrm Infestation</a></li>
+                </ul>
+            </div>
+    
         </div>
         <!-- /content -->
 
@@ -355,8 +424,8 @@
             <a data-rel="back" class="ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all backbutton">No text</a>
             <h1>Chaos Beastman</h1>
             <div data-type="horizontal" data-role="controlgroup" class="ui-btn-right">  
-                    <a href="#reinforcepanel" class="ui-btn ui-icon-plus ui-btn-icon-notext ui-corner-all" onclick="reinforceLarge()"></a>
-                    <a href="#rightpanel" class="ui-btn ui-icon-info ui-btn-icon-notext ui-corner-all">No text</a>
+                <a href="#reinforcepanel" class="ui-btn ui-icon-plus ui-btn-icon-notext ui-corner-all" onclick="reinforceLarge()">No text</a>
+                <a href="#rightpanel" class="ui-btn ui-icon-info ui-btn-icon-notext ui-corner-all">No text</a>
             </div>
             
         </div>
@@ -855,6 +924,205 @@
 
     </div>
     <!-- /page -->
+
+    <!-- Start of 10th page -->
+    <script>
+        function print_ambull(){
+            document.getElementById("d20_ambull").innerHTML = d20;
+            action = actions_ambull[column][row];
+            document.getElementById("action_ambull").innerHTML = action;
+            findDescription(action);
+            document.getElementById("desc_ambull").innerHTML = description;
+            document.getElementById("desc2_ambull").innerHTML = description2;
+        }
+    
+        var actions_ambull = new Array();
+        actions_ambull[0] = new Array("Hold", "Advance", "Advance", "Advance", "Charge", "Charge", "Tunnel (Ambull)");
+        actions_ambull[1] = new Array("Advance", "Advance", "Advance", "Advance", "Onslaught", "Onslaught", "Swipe");
+        actions_ambull[2] = new Array("Advance", "Advance", "Charge", "Onslaught", "Onslaught", "Onslaught", "Tunnel (Ambull)");
+        actions_ambull[3] = new Array("Charge", "Charge", "Charge", "Charge", "Charge", "Charge", "Tunnel (Ambull)");
+        actions_ambull[4] = new Array("Hold", "Fall Back", "Fall Back", "Charge", "Charge", "Charge", "Tunnel (Ambull)");
+    
+    </script>
+            
+    <div data-role="page" id="ambull">
+        
+        <div data-role="header">
+            <a data-rel="back" class="ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all backbutton">No text</a>
+            <h1>Ambull</h1>
+            <div data-type="horizontal" data-role="controlgroup" class="ui-btn-right">  
+                <a href="#reinforcepanel" class="ui-btn ui-icon-plus ui-btn-icon-notext ui-corner-all" onclick="reinforceHuge()">No text</a>
+                <a href="#ambullpanel" class="ui-btn ui-icon-info ui-btn-icon-notext ui-corner-all">No text</a>
+            </div>
+        </div><!-- /header -->
+            
+        <div data-role="content">	
+                <form>
+                <input type="button" onclick="pickcolumn_ambull(0); print_ambull();" value="Hidden">
+                <input type="button" onclick="pickcolumn_ambull(1); print_ambull();" value="Engaged">
+                <input type="button" onclick="pickcolumn_ambull(2); print_ambull();" value="Close">
+                <input type="button" onclick="pickcolumn_ambull(3); print_ambull();" value="Protective">
+                <input type="button" onclick="pickcolumn_ambull(4); print_ambull();" value="Other">
+            </form>
+                    
+            <div class="ui-grid-a" style="text-align: center; margin-bottom: 0px">
+                <div class="ui-block-a">
+                    <h1 class="output" id="d20_ambull"></h1>
+                </div>
+                
+                <div class="ui-block-b">
+                    <h2 class="output" id="action_ambull"></h2>
+                </div>
+            </div><!-- /grid-a -->
+    
+            <div class="ui-body ui-corner-all">
+                <p class="output" id="desc_ambull"></p>
+                <p class="output" id="desc2_ambull"></p>
+                </h3>
+            </div>        
+        </div><!-- /content -->
+    
+        <script>        
+            $( ".backbutton" ).click(function() {
+                $( ".output" ).empty();
+            });
+        </script>
+    
+    </div>
+    <!-- /page -->            
+    
+    <!-- Start of 11th page -->
+    <script>
+            function print_ambull_enraged(){
+                document.getElementById("d20_ambull_enraged").innerHTML = d20;
+                action = actions_ambull_enraged[column][row];
+                document.getElementById("action_ambull_enraged").innerHTML = action;
+                findDescription(action);
+                document.getElementById("desc_ambull_enraged").innerHTML = description;
+                document.getElementById("desc2_ambull_enraged").innerHTML = description2;
+            }
+        
+            var actions_ambull_enraged = new Array();
+            actions_ambull_enraged[0] = new Array("Hold", "Advance", "Advance", "Advance", "Charge", "Charge", "Tunnel (Ambull)");
+            actions_ambull_enraged[1] = new Array("Advance", "Advance", "Advance", "Advance", "Onslaught", "Onslaught", "Swipe");
+            actions_ambull_enraged[2] = new Array("Advance", "Advance", "Charge", "Charge", "Charge", "Charge", "Tunnel (Ambull)");
+            actions_ambull_enraged[3] = new Array("Charge", "Charge", "Charge", "Charge", "Charge", "Charge", "Tunnel (Ambull)");
+            actions_ambull_enraged[4] = new Array("Hold", "Advance", "Advance", "Charge", "Charge", "Charge", "Tunnel (Ambull)");
+        
+        </script>
+            
+        <div data-role="page" id="ambull_enraged">
+            
+            <div data-role="header">
+                <a data-rel="back" class="ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all backbutton">No text</a>
+                <h1>Ambull Enraged</h1>
+                <div data-type="horizontal" data-role="controlgroup" class="ui-btn-right">  
+                    <a href="#reinforcepanel" class="ui-btn ui-icon-plus ui-btn-icon-notext ui-corner-all" onclick="reinforceHuge()">No text</a>
+                    <a href="#ambullpanel" class="ui-btn ui-icon-info ui-btn-icon-notext ui-corner-all">No text</a>
+                </div>
+            </div><!-- /header -->
+                
+            <div data-role="content">	
+                    <form>
+                    <input type="button" onclick="pickcolumn_ambull(0); print_ambull_enraged();" value="Hidden">
+                    <input type="button" onclick="pickcolumn_ambull(1); print_ambull_enraged();" value="Engaged">
+                    <input type="button" onclick="pickcolumn_ambull(2); print_ambull_enraged();" value="Close">
+                    <input type="button" onclick="pickcolumn_ambull(3); print_ambull_enraged();" value="Enraged">
+                    <input type="button" onclick="pickcolumn_ambull(4); print_ambull_enraged();" value="Other">
+                </form>
+                        
+                <div class="ui-grid-a" style="text-align: center; margin-bottom: 0px">
+                    <div class="ui-block-a">
+                        <h1 class="output" id="d20_ambull_enraged"></h1>
+                    </div>
+                    
+                    <div class="ui-block-b">
+                        <h2 class="output" id="action_ambull_enraged"></h2>
+                    </div>
+                </div><!-- /grid-a -->
+        
+                <div class="ui-body ui-corner-all">
+                    <p class="output" id="desc_ambull_enraged"></p>
+                    <p class="output" id="desc2_ambull_enraged"></p>
+                    </h3>
+                </div>        
+            </div><!-- /content -->
+        
+            <script>        
+                $( ".backbutton" ).click(function() {
+                    $( ".output" ).empty();
+                });
+            </script>
+        
+        </div>
+    <!-- /page -->
+    
+    <!-- Start of 12th page -->
+    <script>
+        function print_borewyrm(){
+            document.getElementById("d20_borewyrm").innerHTML = d20;
+            action = actions_borewyrm[column][row];
+            document.getElementById("action_borewyrm").innerHTML = action;
+            findDescription(action);
+            document.getElementById("desc_borewyrm").innerHTML = description;
+            document.getElementById("desc2_borewyrm").innerHTML = description2;
+        }
+    
+        var actions_borewyrm = new Array();
+        actions_borewyrm[0] = new Array("Tunnel (Borewyrm)", "Hold", "Sneak", "Sneak", "Advance", "Advance", "Consume");
+        actions_borewyrm[1] = new Array("Tunnel (Borewyrm)", "Advance", "Advance", "Advance", "Onslaught", "Onslaught", "Consume");
+        actions_borewyrm[2] = new Array("Tunnel (Borewyrm)", "Hold", "Hold", "Hold", "Charge", "Charge", "Consume");
+        actions_borewyrm[3] = new Array("Tunnel (Borewyrm)", "Fall Back", "Charge", "Charge", "Charge", "Charge", "Consume");
+        actions_borewyrm[4] = new Array("Tunnel (Borewyrm)", "Fall Back", "Fall Back", "Charge", "Charge", "Consume", "Consume");
+    
+    </script>
+            
+    <div data-role="page" id="borewyrm">
+        
+        <div data-role="header">
+            <a data-rel="back" class="ui-btn ui-icon-carat-l ui-btn-icon-notext ui-corner-all backbutton">No text</a>
+            <h1>Borewyrm Infestation</h1>
+            <div data-type="horizontal" data-role="controlgroup" class="ui-btn-right">  
+                <a href="#reinforcepanel" class="ui-btn ui-icon-plus ui-btn-icon-notext ui-corner-all" onclick="reinforceHuge()">No text</a>
+                <a href="#rightpanel" class="ui-btn ui-icon-info ui-btn-icon-notext ui-corner-all">No text</a>
+            </div>
+        </div><!-- /header -->
+            
+        <div data-role="content">	
+                <form>
+                <input type="button" onclick="pickcolumn_ambull(0); print_borewyrm();" value="Hidden">
+                <input type="button" onclick="pickcolumn_ambull(1); print_borewyrm();" value="Engaged">
+                <input type="button" onclick="pickcolumn_ambull(2); print_borewyrm();" value="In Cover">
+                <input type="button" onclick="pickcolumn_ambull(3); print_borewyrm();" value="Close">
+                <input type="button" onclick="pickcolumn_ambull(4); print_borewyrm();" value="Other">
+            </form>
+                    
+            <div class="ui-grid-a" style="text-align: center; margin-bottom: 0px">
+                <div class="ui-block-a">
+                    <h1 class="output" id="d20_borewyrm"></h1>
+                </div>
+                
+                <div class="ui-block-b">
+                    <h2 class="output" id="action_borewyrm"></h2>
+                </div>
+            </div><!-- /grid-a -->
+    
+            <div class="ui-body ui-corner-all">
+                <p class="output" id="desc_borewyrm"></p>
+                <p class="output" id="desc2_borewyrm"></p>
+                </h3>
+            </div>        
+        </div><!-- /content -->
+    
+        <script>        
+            $( ".backbutton" ).click(function() {
+                $( ".output" ).empty();
+            });
+        </script>
+    
+    </div>
+    <!-- /page -->            
+        
         
     
     
